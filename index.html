@@ -1246,7 +1246,7 @@ async function loadRemote(){
     const d = await (await fetch(WALL_API, { redirect:"follow" })).json();
     if (!d.ok) throw new Error("bad reply");
     remoteItems = d.items; LS.set("mtjas-wall-cache", remoteItems);
-    $("#wallMode").textContent = sent ? "saved online" : "some notes waiting to upload";
+    $("#wallMode").textContent = sent ? "" : "some notes waiting to upload";
   } catch (e) {
     remoteItems = remoteItems || LS.get("mtjas-wall-cache") || [];
     $("#wallMode").textContent = "offline: notes are kept on this laptop and upload later";
