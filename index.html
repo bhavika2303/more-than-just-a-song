@@ -1161,8 +1161,8 @@ function renderListener(){
   const r = rnd(21);
   $("#behav").innerHTML = CONTENT.listener.behaviours.map((b,i) => `<button type="button" data-beh="${i}" aria-pressed="false" style="--r:${(r()*6-3).toFixed(1)}deg">${esc(b.label)}</button>`).join("");
   showBeh(-1);
-  const tints = ["#f6e7b8","#dcd5ec","#dfe6cf","#f1cfc9"];
-  $("#lyricNotes").innerHTML = CONTENT.listener.lyrics.map((_,i) => `<div class="lnote" style="background:${tints[i%4]};--r:${(r()*2-1).toFixed(1)}deg"><span class="tape"></span>“${ed(`listener.lyrics.${i}.text`)}”<small>${ed(`listener.lyrics.${i}.src`)}</small></div>`).join("");
+  const tints = ["#f6e7b8","#dcd5ec","#dfe6cf","#f1cfc9","#cfdbe6","#f3d6c1"];
+  $("#lyricNotes").innerHTML = CONTENT.listener.lyrics.map((_,i) => `<div class="lnote" style="background:${tints[i%6]};--r:${(r()*2-1).toFixed(1)}deg"><span class="tape"></span>“${ed(`listener.lyrics.${i}.text`)}”<small>${ed(`listener.lyrics.${i}.src`)}</small></div>`).join("");
   $("#meaningful").innerHTML = CONTENT.listener.meaningful.map((_,i) => `<li>${ed(`listener.meaningful.${i}.song`,"span","js")}${ed(`listener.meaningful.${i}.why`,"span","jw")}</li>`).join("");
   renderDiary();
 }
