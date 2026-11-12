@@ -426,7 +426,8 @@ section{position:relative}
 .w-hiphop .w-top{background:rgba(28,26,25,.75)}
 .w-hiphop .w-title{font-family:var(--f-rap);text-transform:uppercase;font-size:clamp(64px,12vw,190px);line-height:.84;letter-spacing:.005em}
 .w-hiphop .w-title span{color:var(--sage);display:block}
-.w-hiphop .w-feel li{background:var(--sage);color:#1c1a19}
+.w-hiphop .w-feel li{background:var(--pink);color:#1c1a19}
+.w-hiphop .w-feel li:nth-child(even){background:var(--sage)}
 .w-hiphop .lyric{background:#f6efe4;color:#1c1a19;border:2px solid #1c1a19;box-shadow:5px 5px 0 var(--pink)}
 .w-hiphop .lyric blockquote{font-family:var(--f-rap);text-transform:uppercase;font-size:24px;letter-spacing:.01em}
 .w-hiphop .player{background:#2a2725;border:1px solid #3d3936}
@@ -793,6 +794,8 @@ const CONTENT = {
     ]
   }
 };
+/* Song wall on the public site: Google Apps Script web app that writes to the "MTJAS Song Wall" sheet */
+const WALL_API = "https://script.google.com/macros/s/AKfycbxB8-fjvznVBnOs08JzyEuGJGZ0cN9t3On9a85qCyQqo55C4MuTF9L3kf8_Xxi0uwd87w/exec";
 /* ===================== end of editable content ===================== */
 
 const GENRES = ["indie","hiphop","bolly"];
@@ -1197,7 +1200,7 @@ function renderWall(){
   $("#wallCount").textContent = wallItems.length ? `${wallItems.length} song${wallItems.length === 1 ? "" : "s"} pinned` : "No songs pinned yet";
   $("#board").innerHTML = wallItems.length ? wallItems.map(n => `<article class="sticky c${(n.color|0)%5}${n.id === freshId ? " fresh" : ""}" style="--t:${(+n.tilt || 0).toFixed(1)}deg">
       <p class="s-song">${esc(n.song)}</p>${n.artist ? `<p class="s-artist">${esc(n.artist)}</p>` : ""}${n.note ? `<p class="s-note">“${esc(n.note)}”</p>` : ""}
-      <p class="s-by">— ${esc(n.name || "a listener")}</p>${store.canEdit ? `<button type="button" class="s-del" data-del="${esc(n.id)}" aria-label="Remove this note">×</button>` : ""}</article>`).join("")
+      <p class="s-by">— ${esc(n.name || "a listener")}</p>${store.canEdit && store.db ? `<button type="button" class="s-del" data-del="${esc(n.id)}" aria-label="Remove this note">×</button>` : ""}</article>`).join("")
     : `<div class="board-empty">The wall is waiting for its first song.<small>Fill in the card and press “Pin it to the wall”. Your note appears here instantly.</small></div>`;
 }
 function startWallDb(db){
@@ -1208,6 +1211,42 @@ function startWallDb(db){
   }, e => { clearTimeout(t); $("#wallCount").textContent = "The wall stopped updating. Reload the page to reconnect."; });
 }
 function startWallLocal(){ wallItems = LS.get("mtjas-wall") || []; renderWall(); $("#wallMode").textContent = "saved on this device"; }
+
+/* Public site: notes go to a Google Sheet through WALL_API. Unsent notes wait on this device and retry. */
+let remoteItems = null;
+const pending = () => LS.get("mtjas-wall-pending") || [];
+function mergeWall(){ wallItems = [...pending(), ...(remoteItems || [])]; renderWall(); }
+async function sendRemote(item){
+  const r = await fetch(WALL_API, { method:"POST", body:JSON.stringify(item), redirect:"follow" });
+  const d = await r.json(); if (!d.ok) throw new Error(d.error || "not saved");
+}
+async function flushPending(){
+  for (const p of pending()){
+    try { await sendRemote(p); LS.set("mtjas-wall-pending", pending().filter(x => x.lid !== p.lid)); }
+    catch (e) { return false; }
+  }
+  return true;
+}
+async function loadRemote(){
+  const sent = await flushPending();
+  try {
+    const d = await (await fetch(WALL_API, { redirect:"follow" })).json();
+    if (!d.ok) throw new Error("bad reply");
+    remoteItems = d.items; LS.set("mtjas-wall-cache", remoteItems);
+    $("#wallMode").textContent = sent ? "saved online" : "some notes waiting to upload";
+  } catch (e) {
+    remoteItems = remoteItems || LS.get("mtjas-wall-cache") || [];
+    $("#wallMode").textContent = "offline: notes are kept on this laptop and upload later";
+  }
+  mergeWall();
+}
+function startWallRemote(){ remoteItems = LS.get("mtjas-wall-cache"); if (remoteItems) mergeWall(); loadRemote(); setInterval(loadRemote, 20000); }
+async function pinRemote(item){
+  item.lid = "w" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); item.id = item.lid; freshId = item.lid;
+  LS.set("mtjas-wall-pending", [item, ...pending()]); mergeWall();
+  const ok = await flushPending(); loadRemote();
+  return ok;
+}
 async function submitWall(e){
   e.preventDefault();
   const song = $("#w-song").value.trim(), msg = $("#formMsg");
@@ -1215,9 +1254,11 @@ async function submitWall(e){
   const item = { song, artist:$("#w-artist").value.trim(), note:$("#w-note").value.trim(), name:$("#w-name").value.trim(), color:Math.floor(Math.random()*5), tilt:+(Math.random()*6-3).toFixed(1), createdAt:Date.now() };
   const btn = $("#wallForm button[type=submit]"); btn.disabled = true; msg.textContent = "";
   try {
+    let note = "Pinned. Thank you for adding to the wall.";
     if (store.db){ const ref = await store.db.collection("wall").add(item); freshId = ref.id; }
+    else if (WALL_API){ if (!(await pinRemote(item))) note = "Pinned. It will upload when the internet is back."; }
     else { item.id = "l" + Date.now(); freshId = item.id; wallItems.unshift(item); LS.set("mtjas-wall", wallItems); }
-    renderWall(); $("#wallForm").reset(); toast("Pinned. Thank you for adding to the wall.");
+    renderWall(); $("#wallForm").reset(); toast(note);
   } catch (err) { msg.textContent = errText(err); }
   btn.disabled = false;
 }
@@ -1326,7 +1367,7 @@ matchMedia("(max-width:700px)").addEventListener("change", () => { buildMap(); r
 async function initRuntime(){
   if (!store.inViewer){
     const saved = LS.get("mtjas-content"); if (saved){ O = saved.o || {}; DIARY = saved.diary ?? null; }
-    store.canEdit = new URLSearchParams(location.search).has("edit"); $("#editToggle").hidden = !store.canEdit; applyAll(); startWallLocal(); return;
+    store.canEdit = new URLSearchParams(location.search).has("edit"); $("#editToggle").hidden = !store.canEdit; applyAll(); WALL_API ? startWallRemote() : startWallLocal(); return;
   }
   const [db, user, assets] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("assets")]);
   store.db = db; store.assets = assets;
