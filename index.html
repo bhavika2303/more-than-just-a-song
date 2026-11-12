@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="An interactive exhibition on the ecology of music consumption: from inspiration to the artist, through Spotify, into three genre worlds and finally to the listener.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>More Than Just a Song</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Bodoni+Moda:ital,opsz,wght@1,6..96,400..600&family=Courier+Prime:wght@400;700&family=Gloock&family=Instrument+Sans:wght@400..700&family=Yatra+One&display=swap">
+<style>
+@font-face{font-family:"MTJAS Hand";src:url("https://fonts.gstatic.com/s/homemadeapple/v24/Qw3EZQFXECDrI2q789EKQZJob0x6XHgOiJM6.woff2") format("woff2");font-display:swap;size-adjust:68%}
+/* Layout: one long scrapbook scroll. Five pinned spreads joined by a hand-drawn thread,
+   torn paper between them, a fixed "journey strip" to step through, and three genre worlds
+   that open over the page like a record sleeve pulled out. Single paper world by choice (no dark theme). */
+:root{
+  --paper:#f2eadc; --paper-2:#e7dac6; --paper-3:#fbf7f0;
+  --pink:#d9a6a1; --pink-deep:#b4706c;
+  --lav:#bcb0d6; --lav-deep:#6c5f9e;
+  --sage:#a9b897; --sage-deep:#5b6e50;
+  --char:#2a2624; --ink:#3b3330; --muted:#7a6c63;
+  --spot:#1db954; --marigold:#dc9a36; --maroon:#7b2f3c;
+  --f-display:"Gloock","Bodoni 72",Georgia,serif;
+  --f-indie:"Bodoni Moda","Didot",Georgia,serif;
+  --f-body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --f-hand:"MTJAS Hand","Bradley Hand","Segoe Script",cursive;
+  --f-mono:"Courier Prime","Courier New",ui-monospace,monospace;
+  --f-rap:"Anton",Impact,"Arial Narrow Bold",sans-serif;
+  --f-bolly:"Yatra One","Bodoni Moda",Georgia,serif;
+  --gutL:max(16px,env(safe-area-inset-left,0px));
+  --gutR:max(16px,env(safe-area-inset-right,0px));
+  --shadow:0 1px 1px rgba(42,38,36,.08),0 6px 18px -6px rgba(42,38,36,.28);
+}
+*{box-sizing:border-box}
+html{font-synthesis:none}
+html{scroll-behavior:smooth}
+html.locked{overflow:hidden}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.22;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .17 0 0 0 0 .15 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px dashed var(--lav-deep);outline-offset:3px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gutL);padding-right:var(--gutR)}
+.hand{font-family:var(--f-hand)}
+.mono{font-family:var(--f-mono)}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- top bar ---------- */
+.topbar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:40;display:flex;justify-content:flex-end;align-items:center;gap:12px;
+  padding:10px var(--gutR) 10px var(--gutL);pointer-events:none}
+.topbar>*{pointer-events:auto}
+.mark{font-family:var(--f-display);font-weight:800;font-style:italic;font-size:19px;letter-spacing:-.01em;background:var(--paper-3);border:0;border-radius:999px;padding:6px 14px;color:var(--char);box-shadow:var(--shadow)}
+.mark small{font-family:var(--f-mono);font-style:normal;font-weight:400;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-left:6px;color:var(--muted)}
+.edit-toggle{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--paper-3);border:1.5px solid var(--char);border-radius:999px;padding:7px 14px;box-shadow:var(--shadow)}
+.edit-toggle[aria-pressed="true"]{background:var(--char);color:var(--paper-3)}
+.editbar{position:fixed;top:calc(env(safe-area-inset-top,0px) + 56px);left:50%;transform:translateX(-50%);z-index:41;width:min(720px,calc(100% - 32px));
+  background:var(--char);color:var(--paper-3);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.45;display:flex;gap:12px;align-items:flex-start;justify-content:space-between;box-shadow:var(--shadow)}
+.editbar b{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)}
+.save-state{font-family:var(--f-mono);font-size:11px;white-space:nowrap;color:var(--sage)}
+
+/* editable fields */
+body.editing [data-k]{outline:1.5px dashed rgba(108,95,158,.75);outline-offset:3px;border-radius:3px;cursor:text;min-width:2ch;display:inline-block}
+body.editing [data-k]:focus{outline-style:solid;background:rgba(255,255,255,.55);color:var(--char)}
+.edit-only{display:none!important}
+body.editing .edit-only{display:flex!important}
+.img-slot{position:relative;background-size:cover;background-position:center}
+.img-tools{position:absolute;left:6px;bottom:6px;gap:6px;z-index:3}
+.img-tools button{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--char);color:var(--paper-3);border:0;border-radius:999px;padding:5px 9px}
+.img-slot.has-img>.ph-art{opacity:0}
+.url-edit{flex-direction:column;gap:6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;width:100%}
+.url-edit input{font:14px var(--f-body);letter-spacing:0;text-transform:none;padding:9px 10px;border:1.5px solid var(--char);border-radius:8px;background:#fff;color:var(--char);width:100%}
+.url-err{font-size:13px;color:var(--maroon)}
+
+/* ---------- shared stage furniture ---------- */
+section{position:relative}
+.tear{position:absolute;left:0;right:0;top:-22px;height:24px;background:inherit;pointer-events:none;z-index:1}
+.stage{padding-block:110px 120px}
+.stage-head{display:grid;gap:14px;max-width:820px;margin-bottom:48px}
+.stage-no{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:center}
+.stage-no span{background:var(--char);color:var(--paper-3);padding:3px 8px;border-radius:3px}
+.stage-title{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,6.4vw,92px);line-height:.95;letter-spacing:-.02em;color:var(--char)}
+.stage-title em{font-style:normal;color:var(--pink-deep)}
+.lede{max-width:62ch;font-size:clamp(17px,1.35vw,20px);color:var(--ink)}
+.scribble{font-family:var(--f-hand);font-size:clamp(22px,2vw,28px);color:var(--pink-deep);line-height:1.1}
+.tape{position:absolute;width:86px;height:26px;background:rgba(232,220,190,.72);box-shadow:0 1px 2px rgba(0,0,0,.08);top:-12px;left:50%;transform:translateX(-50%) rotate(-4deg);z-index:2}
+.tape::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.18) 6px 7px)}
+
+/* ---------- HERO ---------- */
+.hero{padding-block:100px 96px;overflow:hidden}
+.hero-wrap{position:relative;z-index:2}
+.eyebrow{font-family:var(--f-mono);font-size:clamp(13px,1.15vw,16px);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.title{font-family:var(--f-display);font-weight:900;color:var(--char);font-size:clamp(46px,8vw,128px);line-height:.86;letter-spacing:-.035em;margin:18px 0 0}
+.title .l2{display:block;font-style:italic;font-weight:500;padding-left:.9em;color:var(--pink-deep);letter-spacing:-.02em}
+.title .l3{display:block}
+.title .dot{color:var(--char)}
+.hero-sub{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;margin-top:26px}
+.sub{font-family:var(--f-hand);font-size:clamp(28px,3vw,42px);line-height:1;color:var(--ink);transform:rotate(-2deg);margin-top:28px;display:inline-block}
+.explore{position:relative;display:inline-flex;align-items:center;gap:14px;background:var(--char);color:var(--paper-3);border:0;border-radius:999px;padding:16px 26px 16px 20px;font-size:16px;font-weight:600;letter-spacing:.01em;box-shadow:var(--shadow);transition:transform .25s}
+.explore:hover{transform:translateY(-2px) rotate(-1deg)}
+.explore::before{content:"";position:absolute;inset:-6px;border-radius:999px;border:2px solid var(--pink);animation:ring 2.4s ease-out infinite}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.15,1.5)}}
+.eq{display:inline-flex;gap:3px;align-items:flex-end;height:18px}
+.eq i{width:3px;background:var(--pink);border-radius:2px;animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.3s;background:var(--lav)}
+.eq i:nth-child(3){animation-delay:-.6s;background:var(--sage)}
+.eq i:nth-child(4){animation-delay:-.15s}
+@keyframes eq{0%,100%{height:5px}50%{height:18px}}
+.mapsec{background:var(--paper-2);padding-block:64px 72px}
+.map{position:relative}
+.map svg{width:100%;height:auto;display:block;overflow:visible}
+.map .edge{fill:none;stroke:var(--char);stroke-width:1.6;stroke-linecap:round}
+.map .flow{fill:none;stroke:var(--pink-deep);stroke-width:3;stroke-dasharray:2 14;stroke-linecap:round;animation:flow 2.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-32}}
+.map .loop{fill:none;stroke:var(--sage-deep);stroke-width:2;stroke-dasharray:7 7;animation:flow 3s linear infinite reverse}
+.map .loop-label{font-family:var(--f-hand);font-size:24px;fill:var(--sage-deep)}
+.map .halo{paint-order:stroke;stroke:var(--paper-2);stroke-width:7px;stroke-linejoin:round}
+.map .node{cursor:pointer}
+.map .node circle.blob{stroke:var(--char);stroke-width:2}
+.map .node .blob{transition:transform .3s;transform-box:fill-box;transform-origin:center}
+.map .node:hover .blob,.map .node:focus-visible .blob{transform:scale(1.12) rotate(-6deg)}
+.map .node text.nl{font-family:var(--f-hand);font-size:28px;font-weight:700;fill:var(--char);text-anchor:middle}
+.map .node text.nc{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;fill:var(--muted);text-anchor:middle;text-transform:uppercase}
+.map .node text.ni{font-family:var(--f-display);font-weight:800;font-style:italic;font-size:22px;fill:var(--char);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.map .traveler{font-size:24px;fill:var(--char)}
+.map-hint{font-family:var(--f-hand);font-size:22px;color:var(--muted);text-align:right;margin-top:4px}
+.hero-deco{position:absolute;pointer-events:none;z-index:1}
+.ticket{right:4%;top:92px;transform:rotate(7deg);background:var(--paper-3);border:1.5px dashed var(--muted);padding:10px 16px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);box-shadow:var(--shadow)}
+.ticket b{display:block;font-family:var(--f-display);font-style:italic;font-size:26px;letter-spacing:0;text-transform:none;color:var(--pink-deep)}
+.float-note{font-size:clamp(52px,5.5vw,88px);color:var(--lav-deep);animation:bob 6s ease-in-out infinite;opacity:.65}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-16px) rotate(6deg)}}
+
+/* ---------- STAGE 1 inspiration ---------- */
+#s1{background:var(--paper)}
+.polas{display:flex;flex-wrap:wrap;justify-content:center;gap:34px 26px;padding-top:10px}
+.pola{width:clamp(150px,17vw,215px);aspect-ratio:.8;perspective:1100px;transform:rotate(var(--r)) translateY(var(--y));cursor:pointer;position:relative;transition:transform .35s}
+.pola:hover{transform:rotate(0deg) translateY(calc(var(--y) - 6px)) scale(1.03);z-index:3}
+.pola-in{position:relative;width:100%;height:100%;transition:transform .75s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.pola.open .pola-in{transform:rotateY(180deg)}
+.pf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper-3);box-shadow:var(--shadow);padding:9px 9px 0;display:flex;flex-direction:column}
+.pf .photo{flex:1;border-radius:1px;overflow:hidden;display:grid;place-items:center}
+.pf .photo svg{width:72%;height:auto;fill:none;stroke:var(--char);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pf .cap{font-family:var(--f-hand);font-size:clamp(19px,1.6vw,23px);line-height:1.05;padding:8px 2px 12px;color:var(--char)}
+.pf .cap small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pb{transform:rotateY(180deg);padding:16px 14px;background:#fdf9f1 repeating-linear-gradient(transparent 0 23px,rgba(108,95,158,.2) 23px 24px)}
+.pb h3{font-family:var(--f-display);font-style:italic;font-size:18px;font-weight:700;color:var(--pink-deep);margin-bottom:4px}
+.pb p{flex:1;min-height:0;font-family:var(--f-hand);font-size:clamp(16px,1.3vw,19px);line-height:1.22;color:var(--char);overflow:auto}
+.pb .back-hint{margin-top:auto;font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.s1-note{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:40px}
+
+/* ---------- STAGE 2 studio ---------- */
+#s2{background:var(--paper-2)}
+.studio-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px;align-items:start}
+.studio{background:var(--paper-3);padding:14px;box-shadow:var(--shadow);transform:rotate(-.6deg);position:relative}
+.studio svg{display:block;width:100%;height:auto}
+.studio .obj{cursor:pointer;outline:none}
+.studio .obj .hit{fill:transparent;stroke:none}
+.studio .obj:hover .art,.studio .obj:focus-visible .art,.studio .obj.on .art{filter:url(#wobble) drop-shadow(0 6px 10px rgba(180,112,108,.6))}
+.studio .obj:focus-visible .hit,.studio .obj.on .hit{stroke:var(--pink-deep);stroke-width:2.5;stroke-dasharray:6 6}
+.studio .pin circle{fill:var(--pink-deep);stroke:var(--paper-3);stroke-width:3}
+.studio .pin text{fill:var(--paper-3);font:700 15px var(--f-mono);text-anchor:middle;dominant-baseline:central}
+.studio .pin{animation:pulse 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.studio .obj.on .pin{animation:none}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.studio .lbl{font-family:var(--f-hand);font-size:27px;fill:var(--char);font-weight:700;paint-order:stroke;stroke:#fbf7f0;stroke-width:6px;stroke-linejoin:round}
+.studio-card{position:sticky;top:90px;background:#fdf9f1 repeating-linear-gradient(transparent 0 31px,rgba(108,95,158,.18) 31px 32px);padding:28px 26px 30px;box-shadow:var(--shadow);transform:rotate(1deg);min-height:300px}
+.studio-card .kicker{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.studio-card h3{font-family:var(--f-display);font-size:clamp(30px,3vw,44px);font-weight:800;line-height:1;color:var(--char);margin:8px 0 4px}
+.studio-card .role{font-family:var(--f-hand);font-size:28px;color:var(--pink-deep);line-height:1.1;margin-bottom:12px}
+.studio-card p.body{font-size:17px;max-width:46ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{border:1.5px solid var(--char);background:transparent;border-radius:999px;padding:6px 13px;font-size:14px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--char);color:var(--paper-3)}
+
+/* ---------- STAGE 3 spotify ---------- */
+#s3{background:var(--paper)}
+.hub-wrap{display:grid;gap:0}
+.sat-info{max-width:640px;margin:0 auto 10px;text-align:center;min-height:64px;font-size:17px}
+.sat-info b{font-family:var(--f-display);font-style:italic;font-size:22px;color:var(--char);display:block}
+.hub-diagram svg{width:100%;height:auto;display:block;overflow:visible}
+.hub-diagram .sat{cursor:pointer;outline:none}
+.hub-diagram .sat rect{fill:var(--paper-3);stroke:var(--char);stroke-width:1.5;transition:fill .2s}
+.hub-diagram .sat text{font-family:var(--f-body);font-weight:600;fill:var(--char);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hub-diagram .sat:hover rect{fill:#fff}
+.hub-diagram .sat.on rect,.hub-diagram .sat.on:hover rect{fill:var(--spot);stroke:#0e0e0e}
+.hub-diagram .sat:focus-visible rect{stroke:var(--lav-deep);stroke-width:3}
+.hub-diagram .spoke{stroke:var(--char);stroke-width:1.5;stroke-dasharray:4 6;fill:none}
+.hub-diagram .branch{fill:none;stroke-width:4;stroke-linecap:round}
+.hub-diagram .ring{fill:none;stroke:var(--char);stroke-width:1.5;stroke-dasharray:2 10;animation:spin 30s linear infinite;transform-box:fill-box;transform-origin:center}
+.hub-diagram .in{font-family:var(--f-hand);font-size:24px;fill:var(--muted);text-anchor:middle}
+.branches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;width:min(900px,100%)}
+.branch-btn{border:0;border-radius:14px;padding:18px 16px;text-align:left;box-shadow:var(--shadow);transition:transform .25s;display:grid;gap:4px}
+.branch-btn:hover{transform:translateY(-4px) rotate(-1deg)}
+.branch-btn .bn{font-weight:700;font-size:18px;line-height:1.15}
+.branch-btn .bf{font-family:var(--f-hand);font-size:21px;line-height:1.05}
+.branch-btn.b-indie{background:var(--lav)}
+.branch-btn.b-hiphop{background:var(--char);color:var(--paper-3)}
+.branch-btn.b-bolly{background:var(--pink)}
+
+/* ---------- STAGE 4 universe ---------- */
+#s4{background:var(--paper-2)}
+.s4-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#s4 .neb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
+.feelings-float{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.feelings-float span{position:absolute;font-family:var(--f-hand);font-size:clamp(20px,2vw,30px);color:rgba(59,51,48,.28);animation:drift var(--d) ease-in-out infinite;white-space:nowrap}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(-4deg)}50%{transform:translate(18px,-22px) rotate(4deg)}}
+.mood{position:relative;z-index:2;background:var(--paper-3);padding:26px 26px 28px;box-shadow:var(--shadow);margin-bottom:46px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start;transform:rotate(-.4deg)}
+.mood h3{font-family:var(--f-display);font-size:clamp(28px,3vw,40px);font-weight:800;line-height:1;color:var(--char)}
+.mood .q{font-family:var(--f-hand);font-size:25px;color:var(--pink-deep);margin:4px 0 14px}
+.moods{display:flex;flex-wrap:wrap;gap:9px}
+.moods button{border:1.5px solid var(--char);background:var(--paper);border-radius:999px;padding:8px 15px;font-size:15px;font-weight:600;transition:transform .2s}
+.moods button:hover{transform:translateY(-2px)}
+.moods button[aria-pressed="true"]{background:var(--char);color:var(--paper-3)}
+.mood-result{border-radius:12px;padding:20px;min-height:180px;display:grid;gap:10px;align-content:start;background:var(--paper-2)}
+.mood-result.r-indie{background:var(--lav)}
+.mood-result.r-hiphop{background:var(--char);color:var(--paper-3)}
+.mood-result.r-bolly{background:var(--pink)}
+.mood-result .mr-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.mood-result .mr-g{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1}
+.mood-result .mr-w{font-family:var(--f-hand);font-size:22px;line-height:1.15}
+.mood-result .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid currentColor;background:transparent;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:700;text-decoration:none;color:inherit}
+.btn.solid{background:var(--char);color:var(--paper-3);border-color:var(--char)}
+.r-hiphop .btn.solid{background:var(--paper-3);color:var(--char);border-color:var(--paper-3)}
+.btn[aria-disabled="true"]{opacity:.55;cursor:default}
+
+.portals{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.portal{position:relative;border:0;padding:0;text-align:left;min-height:520px;border-radius:4px;overflow:hidden;box-shadow:0 2px 2px rgba(0,0,0,.08),0 22px 40px -18px rgba(42,38,36,.55);transition:transform .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;justify-content:flex-end}
+.portal:hover,.portal:focus-visible{transform:translateY(-8px) rotate(-1deg)}
+.portal .pt-in{position:relative;z-index:2;padding:22px 22px 24px;display:grid;gap:10px;justify-items:start}
+.portal .pt-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.portal .pt-feel{display:flex;flex-wrap:wrap;gap:6px}
+.portal .pt-feel span{font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px}
+.portal .pt-go{font-family:var(--f-hand);font-size:26px}
+.pt-covers{display:flex;margin:4px 0 6px}
+.pt-covers .mini{width:68px;height:68px;margin-right:-16px;border:3px solid #fbf7f0;box-shadow:0 8px 14px -8px rgba(0,0,0,.6);transform:rotate(var(--r));overflow:hidden}
+.pt-covers .mini .ph-art{position:absolute;inset:0;transition:opacity .3s}
+.pt-meta{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.p-indie{background:linear-gradient(170deg,#d9d2ea 0%,#bcb0d6 45%,#a7b5c9 100%);color:#2c2747}
+.p-indie .pt-name{font-family:var(--f-indie);font-style:italic;font-weight:500;font-size:clamp(38px,3.6vw,56px);line-height:.92}
+.p-indie .pt-feel span{background:rgba(255,255,255,.5)}
+.p-indie .haze{position:absolute;border-radius:50%;filter:blur(18px);background:rgba(255,255,255,.65);animation:haze 9s ease-in-out infinite}
+@keyframes haze{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-30px) scale(1.2)}}
+.p-indie .sun{position:absolute;top:44px;right:34px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#f6d9cf 0 40%,rgba(246,217,207,0) 70%)}
+.p-hiphop{background:#211e1c;color:var(--paper-3)}
+.p-hiphop::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(217,166,161,.35) 1.4px,transparent 1.6px);background-size:11px 11px;-webkit-mask:linear-gradient(160deg,#000 0%,transparent 70%);mask:linear-gradient(160deg,#000 0%,transparent 70%)}
+.p-hiphop .pt-name{font-family:var(--f-rap);font-size:clamp(46px,4.6vw,74px);line-height:.88;text-transform:uppercase;letter-spacing:.01em}
+.p-hiphop .pt-name i{font-style:normal;color:var(--sage)}
+.p-hiphop .pt-feel span{background:var(--sage);color:var(--char)}
+.p-hiphop .bars{position:absolute;top:34px;left:22px;right:22px;height:120px;display:flex;align-items:flex-end;gap:5px}
+.p-hiphop .bars i{flex:1;background:var(--pink);animation:beat .667s ease-in-out infinite;transform-origin:bottom}
+@keyframes beat{0%,100%{transform:scaleY(.25)}40%{transform:scaleY(1)}}
+.p-hiphop .sticker{position:absolute;top:150px;right:18px;transform:rotate(9deg);background:var(--paper-3);color:var(--char);font-family:var(--f-rap);font-size:20px;padding:6px 12px;border:2px solid var(--char);box-shadow:3px 3px 0 var(--pink)}
+.p-bolly{background:#e7b7ad;color:#4b1d26}
+.p-bolly::before{content:"";position:absolute;left:50%;top:150px;width:300px;height:300px;transform:translate(-50%,-50%);border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(123,47,60,.18) 0 10deg,transparent 10deg 20deg),radial-gradient(circle,rgba(220,154,54,.55) 0 18%,transparent 19% 30%,rgba(123,47,60,.2) 31% 33%,transparent 34%);animation:spin 40s linear infinite}
+.p-bolly .pt-name{font-family:var(--f-bolly);font-size:clamp(34px,3.2vw,50px);line-height:1}
+.p-bolly .pt-feel span{background:rgba(255,248,236,.7)}
+.toran{position:absolute;top:0;left:0;right:0;height:46px;display:flex;justify-content:space-around;z-index:1}
+.toran::before{content:"";position:absolute;top:8px;left:-5%;right:-5%;height:30px;border-bottom:2px solid #6b4b2a;border-radius:0 0 50% 50%}
+.toran i{width:15px;height:15px;border-radius:50%;background:var(--marigold);box-shadow:0 4px 0 #c97f24,0 8px 0 var(--marigold),0 12px 0 #c97f24;margin-top:14px;animation:sway 3s ease-in-out infinite;transform-origin:top}
+.toran i:nth-child(even){margin-top:24px;animation-delay:-1.5s;background:#e56b5d;box-shadow:0 4px 0 #b44d42,0 8px 0 #e56b5d}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+.qr-head{position:relative;z-index:2;margin:80px 0 26px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px}
+.qr-head h3{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,3.4vw,48px);line-height:1;color:var(--char)}
+.qrs{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.qr-card{background:var(--paper-3);padding:20px 20px 22px;box-shadow:var(--shadow);display:grid;gap:12px;align-content:start;position:relative;border-top:10px solid var(--c)}
+.qr-card::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;background:radial-gradient(circle at 6px 0,transparent 5px,var(--paper-3) 5.5px) 0 0/12px 8px repeat-x}
+.qr-card .qk{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.qr-card h4{margin:0;font-family:var(--f-display);font-size:24px;font-weight:800;color:var(--char);line-height:1.05}
+.qr-box{aspect-ratio:1;width:100%;max-width:230px;justify-self:center;display:grid;place-items:center;text-align:center}
+.qr-box svg{width:100%;height:100%;display:block}
+.qr-empty{border:2px dashed var(--muted);border-radius:6px;padding:18px;font-size:14px;color:var(--muted);line-height:1.4}
+.qr-empty b{display:block;font-family:var(--f-hand);font-size:24px;color:var(--ink);font-weight:700;margin-bottom:4px}
+
+/* ---------- STAGE 5 listener ---------- */
+#s5{background:var(--paper)}
+.listener-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:stretch}
+.collage{position:relative}
+.collage svg{width:100%;height:100%;display:block}
+.collage .note{animation:bob 5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.listener-side{display:flex;flex-direction:column;gap:34px}
+.listener-side .diary{flex:1}
+.side-h{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,2.4vw,34px);line-height:1.05;color:var(--char);margin:0 0 14px}
+.behav{display:flex;flex-wrap:wrap;gap:9px}
+.behav button{border:0;background:var(--paper-3);box-shadow:var(--shadow);padding:7px 14px 8px;font-family:var(--f-hand);font-size:22px;line-height:1;transform:rotate(var(--r));transition:transform .2s}
+.behav button:hover{transform:rotate(0) translateY(-2px)}
+.behav button[aria-pressed="true"]{background:var(--char);color:var(--paper-3)}
+.behav-info{margin-top:16px;background:var(--lav);padding:16px 18px;min-height:96px;position:relative}
+.behav-info b{font-family:var(--f-display);font-style:italic;font-size:22px;display:block;color:var(--char)}
+.diary{background:#fdf9f1 repeating-linear-gradient(transparent 0 33px,rgba(108,95,158,.2) 33px 34px);box-shadow:var(--shadow);padding:30px 24px 26px 56px;position:relative}
+.diary::before{content:"";position:absolute;left:38px;top:0;bottom:0;width:2px;background:rgba(180,112,108,.5)}
+.diary h3{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,2.6vw,38px);color:var(--char);line-height:1}
+.diary .dsub{font-family:var(--f-hand);font-size:22px;color:var(--pink-deep);margin-bottom:14px}
+.entry{padding:8px 0 12px;border-bottom:1px dashed rgba(59,51,48,.2);position:relative}
+.entry .e-meta{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.entry .e-song{font-weight:700;color:var(--char)}
+.entry .e-text{font-family:var(--f-hand);font-size:23px;line-height:1.15;color:var(--ink)}
+.entry .ex{background:var(--sage);color:var(--char);padding:0 6px;border-radius:3px}
+.entry .del{position:absolute;right:0;top:6px;border:0;background:none;font-size:20px;color:var(--maroon)}
+.diary-form{margin-top:14px;gap:8px;flex-wrap:wrap;flex-direction:row!important}
+.diary-form input,.diary-form textarea{font:15px var(--f-body);border:1.5px solid var(--char);border-radius:6px;padding:8px 10px;background:#fff;color:var(--char);flex:1 1 160px}
+.diary-form textarea{flex-basis:100%;min-height:64px;resize:vertical}
+.keep{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:34px;margin-top:64px;align-items:stretch}
+.keep>div{display:flex;flex-direction:column}
+.keep h3{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,2.4vw,34px);color:var(--char);margin-bottom:16px}
+.lyric-notes{flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:22px 18px}
+.lnote{position:relative;padding:22px 16px 16px;box-shadow:var(--shadow);transform:rotate(var(--r));font-family:var(--f-hand);font-size:24px;line-height:1.1;color:var(--char)}
+.lnote small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.jcard{flex:1;display:flex;flex-direction:column;background:var(--char);color:var(--paper-3);padding:22px 22px 18px;border-radius:6px;box-shadow:var(--shadow);position:relative}
+.jcard::before{content:"SIDE A · MEANINGFUL";font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;color:var(--pink);display:block;margin-bottom:10px}
+.jcard ol{flex:1;display:flex;flex-direction:column;justify-content:space-between;margin:0;padding:0;list-style:none;counter-reset:t}
+.jcard li{counter-increment:t;display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 10px;padding:10px 0;border-bottom:1px solid rgba(251,247,240,.15)}
+.jcard li::before{content:counter(t,decimal-leading-zero);font-family:var(--f-mono);font-size:13px;color:var(--sage);grid-row:span 2}
+.jcard .js{font-weight:700}
+.jcard .jw{font-family:var(--f-hand);font-size:20px;color:var(--lav);line-height:1.1}
+
+/* ---------- wall ---------- */
+#wall{background:var(--paper-2);padding-block:100px 150px}
+#wall .stage-title,#wall .stage-no{color:var(--char)}
+.wall-grid{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:36px;align-items:start}
+.card-form{background:var(--paper-3);padding:24px 22px;box-shadow:var(--shadow);display:grid;gap:12px;position:sticky;top:90px;transform:rotate(-1deg)}
+.card-form h3{font-family:var(--f-hand);font-size:32px;line-height:1;color:var(--char)}
+.card-form label{display:grid;gap:4px;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card-form input,.card-form textarea{font:16px var(--f-body);letter-spacing:0;text-transform:none;color:var(--char);border:0;border-bottom:1.5px solid var(--char);background:transparent;padding:6px 2px;border-radius:0}
+.card-form textarea{resize:vertical;min-height:70px;border:1.5px solid var(--char);border-radius:4px;padding:8px}
+.card-form button[type=submit]{background:var(--char);color:var(--paper-3);border:0;border-radius:999px;padding:12px 18px;font-weight:700;font-size:16px}
+.form-msg{font-size:14px;min-height:20px;color:var(--maroon)}
+.wall-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--char);margin-bottom:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px 18px;align-items:start}
+.sticky{position:relative;padding:22px 16px 14px;box-shadow:0 1px 1px rgba(0,0,0,.08),0 10px 18px -10px rgba(0,0,0,.4);transform:rotate(var(--t));transition:transform .25s}
+.sticky:hover{transform:rotate(0) scale(1.03);z-index:2}
+.sticky.c0{background:#f6e7b8}.sticky.c1{background:#f1cfc9}.sticky.c2{background:#d9d1ec}.sticky.c3{background:#fbf7f0}.sticky.c4{background:#dfe6cf}
+.sticky.fresh{animation:pin .6s cubic-bezier(.2,.8,.2,1.4)}
+@keyframes pin{from{transform:scale(.6) rotate(-12deg);opacity:0}}
+.sticky .s-song{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:1.05;color:var(--char)}
+.sticky .s-artist{font-size:14px;font-weight:600;color:var(--ink);margin-top:2px}
+.sticky .s-note{font-family:var(--f-hand);font-size:21px;line-height:1.1;margin-top:8px;color:var(--char)}
+.sticky .s-by{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.sticky .s-del{position:absolute;top:4px;right:6px;border:0;background:none;font-size:20px;color:var(--maroon);line-height:1}
+.board-empty{grid-column:1/-1;border:2px dashed rgba(42,38,36,.45);padding:34px;text-align:center;font-family:var(--f-hand);font-size:28px;color:var(--char)}
+.board-empty small{display:block;font-family:var(--f-body);font-size:15px;margin-top:6px;color:var(--ink)}
+
+/* ---------- loop / outro ---------- */
+#loop{background:var(--paper);padding-block:100px 150px}
+.loop-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+.loop-steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.loop-steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;font-size:17px}
+.loop-steps li::before{content:"↺";color:var(--sage-deep);font-size:22px;line-height:1.1}
+.loop-steps b{color:var(--pink-deep)}
+.loop-svg{width:100%;height:auto;max-width:440px;justify-self:center}
+.again{margin-top:30px}
+
+/* ---------- journey strip ---------- */
+.journey{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:45;display:flex;align-items:center;gap:6px;background:rgba(42,38,36,.94);color:var(--paper-3);border-radius:999px;padding:6px;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);max-width:calc(100% - 24px)}
+.journey button{border:0;background:transparent;color:inherit;border-radius:999px;padding:8px 12px;font-size:14px;font-weight:600;white-space:nowrap}
+.journey .jn{font-size:18px;padding:6px 12px}
+.journey .stops{display:flex;gap:2px}
+.journey .stops button{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px 10px;opacity:.65}
+.journey .stops button[aria-current="step"]{background:var(--pink);color:var(--char);opacity:1}
+.journey .stops button:hover{opacity:1}
+
+/* ---------- genre world overlay ---------- */
+.world{position:fixed;inset:0;z-index:70;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;animation:worldIn .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes worldIn{from{clip-path:circle(0% at 50% 60%)}to{clip-path:circle(150% at 50% 60%)}}
+.w-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.w-top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:calc(10px + env(safe-area-inset-top,0px)) var(--gutR) 10px var(--gutL);backdrop-filter:blur(8px)}
+.w-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.w-tabs button,.w-close{border:1.5px solid currentColor;background:transparent;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:inherit}
+.w-tabs button[aria-current="true"]{background:currentColor}
+.w-tabs button[aria-current="true"] span{filter:invert(1)}
+.w-wrap{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:30px var(--gutR) 140px var(--gutL)}
+.w-head{display:grid;gap:14px;max-width:880px}
+.w-eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+.w-tag{font-size:clamp(18px,1.6vw,22px);max-width:56ch}
+.w-feel{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.w-feel li{padding:6px 14px;border-radius:999px;font-weight:700;font-size:15px}
+.w-lyrics{position:relative;height:300px;margin:30px 0 10px}
+.lyric{position:absolute;margin:0;max-width:min(300px,30%);padding:14px 16px 12px;box-shadow:var(--shadow);animation:lyr var(--d) ease-in-out infinite;animation-delay:var(--dl)}
+@keyframes lyr{0%,100%{transform:translate(0,0) rotate(var(--r))}50%{transform:translate(var(--dx),-14px) rotate(calc(var(--r) * -1))}}
+.lyric blockquote{margin:0;font-family:var(--f-hand);font-size:25px;line-height:1.1}
+.lyric figcaption{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:6px}
+.w-sec-h{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:50px 0 18px;opacity:.85}
+.covers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.cover{display:grid;gap:10px}
+.cover .art{aspect-ratio:1;box-shadow:0 14px 24px -14px rgba(0,0,0,.6);overflow:hidden}
+.cover .ph-art{position:absolute;inset:0;transition:opacity .3s}
+.cover .ph-art em{position:absolute;left:10px;bottom:8px;font-family:var(--f-mono);font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.cover .ca{font-weight:700;font-size:17px;line-height:1.15}
+.cover .cb{font-size:14px;opacity:.8}
+.w-play{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:30px;align-items:start}
+.tracks ol{list-style:none;margin:0;padding:0;counter-reset:n}
+.tracks li{counter-increment:n;display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid rgba(127,127,127,.3)}
+.tracks li::before{content:counter(n,decimal-leading-zero);font-family:var(--f-mono);font-size:13px;opacity:.7}
+.tracks .tt{font-weight:700;font-size:17px}
+.tracks .ta{font-size:14px;opacity:.75}
+.tracks .tm{font-family:var(--f-mono);font-size:12px;opacity:.6}
+.player{display:grid;gap:14px;padding:20px;border-radius:12px}
+.player iframe{width:100%;height:352px;border:0;border-radius:12px}
+.player .qr-box{max-width:200px}
+.tracks li.grp{counter-increment:none;display:block;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;padding:22px 4px 8px;border-bottom:0}
+.tracks li.grp::before{content:none}
+.tracks .tm.fav{opacity:1;font-weight:700;color:var(--pink-deep)}
+.w-hiphop .tracks .tm.fav{color:var(--pink)}
+.cover .art{position:relative}
+.cover .fav{position:absolute;top:8px;right:8px;z-index:2;background:var(--pink);color:#1c1a19;font:700 11px var(--f-mono);letter-spacing:.06em;padding:3px 9px;border-radius:999px}
+.tgroups{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px 56px;max-width:1000px}
+.tgroups:has(> .tracks:only-child){max-width:620px}
+.tg-h{font-family:var(--f-mono);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin:0 0 4px}
+.p-empty{font-family:var(--f-hand);font-size:24px}
+.player .p-k{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+
+/* world: indie */
+.w-indie{background:linear-gradient(180deg,#dcd5ec 0%,#c5bddc 40%,#b3bfd1 100%);color:#29243f}
+.w-indie .w-top{background:rgba(220,213,236,.6)}
+.w-indie .w-title{font-family:var(--f-indie);font-style:italic;font-weight:500;font-size:clamp(56px,9vw,140px);line-height:.88;letter-spacing:-.03em}
+.w-indie .w-feel li{background:rgba(255,255,255,.55)}
+.w-indie .lyric{background:rgba(253,249,241,.82);color:#29243f}
+.w-indie .player{background:rgba(255,255,255,.45)}
+.w-indie .w-bg i{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(30px);animation:haze 14s ease-in-out infinite}
+.w-indie .w-bg b{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.06) 0 2px,transparent 2px 5px)}
+/* world: hip-hop */
+.w-hiphop{background:#1c1a19;color:#f6efe4}
+.w-hiphop .w-top{background:rgba(28,26,25,.75)}
+.w-hiphop .w-title{font-family:var(--f-rap);text-transform:uppercase;font-size:clamp(64px,12vw,190px);line-height:.84;letter-spacing:.005em}
+.w-hiphop .w-title span{color:var(--sage);display:block}
+.w-hiphop .w-feel li{background:var(--sage);color:#1c1a19}
+.w-hiphop .lyric{background:#f6efe4;color:#1c1a19;border:2px solid #1c1a19;box-shadow:5px 5px 0 var(--pink)}
+.w-hiphop .lyric blockquote{font-family:var(--f-rap);text-transform:uppercase;font-size:24px;letter-spacing:.01em}
+.w-hiphop .player{background:#2a2725;border:1px solid #3d3936}
+.w-hiphop .w-bg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(217,166,161,.22) 1.5px,transparent 1.7px);background-size:14px 14px;-webkit-mask:linear-gradient(200deg,#000,transparent 60%);mask:linear-gradient(200deg,#000,transparent 60%)}
+.w-hiphop .w-bg .bigbars{position:absolute;right:-20px;bottom:0;width:46%;height:60%;display:flex;align-items:flex-end;gap:8px;opacity:.16}
+.w-hiphop .w-bg .bigbars i{flex:1;background:var(--pink);animation:beat .667s ease-in-out infinite;transform-origin:bottom}
+.w-hiphop .tracks li{border-color:rgba(246,239,228,.15)}
+/* world: bolly */
+.w-bolly{background:linear-gradient(180deg,#efc3b8 0%,#e7b0a6 50%,#e3a7a0 100%);color:#45161f}
+.w-bolly .w-top{background:rgba(239,195,184,.7)}
+.w-bolly .w-title{font-family:var(--f-bolly);font-size:clamp(46px,7vw,108px);line-height:1}
+.w-bolly .w-feel li{background:rgba(255,248,236,.75)}
+.w-bolly .lyric{background:#fff6e8;color:#45161f;border-left:6px solid var(--marigold)}
+.w-bolly .player{background:rgba(255,246,232,.6)}
+.w-bolly .w-bg .mandala{position:absolute;right:-180px;top:80px;width:620px;height:620px;border-radius:50%;
+  background:repeating-conic-gradient(rgba(123,47,60,.14) 0 6deg,transparent 6deg 12deg),radial-gradient(circle,rgba(220,154,54,.45) 0 14%,transparent 15% 26%,rgba(123,47,60,.18) 27% 28%,transparent 29% 44%,rgba(220,154,54,.25) 45% 46%,transparent 47%);animation:spin 80s linear infinite}
+.w-bolly .w-bg .toran{top:0;height:60px}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--char);color:var(--paper-3);padding:10px 18px;border-radius:999px;font-size:14px;z-index:90;box-shadow:var(--shadow)}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .studio-grid,.listener-grid,.mood,.loop-grid,.w-play{grid-template-columns:minmax(0,1fr)}
+  .studio-card,.card-form{position:static}
+  .portals,.qrs{grid-template-columns:minmax(0,1fr)}
+  .portal{min-height:340px}
+  .covers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wall-grid{grid-template-columns:minmax(0,1fr)}
+  .keep{grid-template-columns:minmax(0,1fr)}
+  .ticket{display:none}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .stage{padding-block:80px 100px}
+  .branches{grid-template-columns:minmax(0,1fr)}
+  .journey .stops button{padding:8px 7px;font-size:10px}
+  .journey .stops .lab{display:none}
+  .journey .jn{padding:6px 9px}
+  .w-lyrics{height:auto;display:grid;gap:14px}
+  .lyric{position:relative;left:auto!important;top:auto!important;max-width:none}
+  .lyric-notes{grid-template-columns:minmax(0,1fr)}
+  .polas{gap:26px 14px}
+  .pola{width:calc(50% - 10px)}
+  .diary{padding-left:44px}
+  .diary::before{left:28px}
+  .mark small{display:none}
+}
+@media (min-width:641px){.journey .stops .num{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="4"/></filter>
+</svg>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <button class="edit-toggle" id="editToggle" type="button" aria-pressed="false" hidden>Edit content</button>
+</header>
+<div class="editbar" id="editbar" hidden>
+  <div><b>Edit mode</b><br>Click dotted text to edit it. Use “＋ cover” on album covers to add artwork. Changes save automatically.</div>
+  <span class="save-state" id="saveState">Saved</span>
+</div>
+
+<main>
+<!-- ================= HOME ================= -->
+<section id="home" class="hero">
+  <span class="hero-deco float-note" style="left:76%;top:9%" aria-hidden="true">♪</span>
+  <span class="hero-deco float-note" style="left:88%;top:44%;animation-delay:-2s;color:var(--char)" aria-hidden="true">♫</span>
+  <span class="hero-deco float-note" style="left:70%;top:66%;animation-delay:-4s;color:var(--sage-deep)" aria-hidden="true">♩</span>
+  <div class="wrap hero-wrap">
+    <p class="eyebrow">A creative project on the ecology of music consumption</p>
+    <h1 class="title">More <span class="l2">than just</span> <span class="l3">a song<span class="dot">.</span></span></h1>
+    <p class="sub">A journey from inspiration to my headphones.</p>
+  </div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="mapsec" class="mapsec">
+  <div class="tear"></div>
+  <div class="wrap">
+    <div class="map" id="map"></div>
+    <p class="map-hint">tap any stop on the thread</p>
+  </div>
+</section>
+
+<!-- ================= STAGE 1 ================= -->
+<section id="s1" class="stage" data-stage="0">
+  <div class="tear"></div>
+  <div class="wrap">
+    <header class="stage-head">
+      <p class="stage-no"><span>Stage 1 of 5</span> Inspiration</p>
+      <h2 class="stage-title">Every song begins <em>somewhere.</em></h2>
+      <p class="lede">Tap a photo to turn it over.</p>
+    </header>
+    <div class="polas" id="polas"></div>
+  </div>
+</section>
+
+<!-- ================= STAGE 2 ================= -->
+<section id="s2" class="stage" data-stage="1">
+  <div class="tear"></div>
+  <div class="wrap">
+    <header class="stage-head">
+      <p class="stage-no"><span>Stage 2 of 5</span> The artist</p>
+      <h2 class="stage-title">Turning inspiration <em>into sound.</em></h2>
+      <p class="lede">Tap an object to see its part in making a song.</p>
+    </header>
+    <div class="studio-grid">
+      <div class="studio"><span class="tape"></span><div id="studioSvg"></div></div>
+      <aside class="studio-card" id="studioCard" aria-live="polite"></aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAGE 3 ================= -->
+<section id="s3" class="stage" data-stage="2">
+  <div class="tear"></div>
+  <div class="wrap">
+    <header class="stage-head">
+      <p class="stage-no"><span>Stage 3 of 5</span> Spotify</p>
+      <h2 class="stage-title">From creation <em>to consumption.</em></h2>
+      <p class="lede">A finished song lands on a platform, then branches out to millions of listeners.</p>
+    </header>
+    <div class="hub-wrap">
+      <div class="sat-info" id="satInfo" aria-live="polite"></div>
+      <div class="hub-diagram" id="hubDiagram"></div>
+      <div class="portals" id="branches"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAGE 4 ================= -->
+<section id="s4" class="stage" data-stage="3">
+  <div class="tear"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <header class="stage-head">
+      <p class="stage-no"><span>Stage 4 of 5</span> My musical universe</p>
+      <h2 class="stage-title">Three worlds, <em>three ways of feeling.</em></h2>
+    </header>
+    <div class="mood">
+      <div>
+        <h3>Mood selector</h3>
+        <p class="q">how are you feeling?</p>
+        <div class="moods" id="moods" role="group" aria-label="Pick a mood"></div>
+      </div>
+      <div class="mood-result" id="moodResult" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAGE 5 ================= -->
+<section id="s5" class="stage" data-stage="4">
+  <div class="tear"></div>
+  <div class="wrap">
+    <header class="stage-head">
+      <p class="stage-no"><span>Stage 5 of 5</span> The listener: me</p>
+      <h2 class="stage-title">And finally, the song <em>becomes mine.</em></h2>
+      <p class="lede">How music becomes personal for me.</p>
+    </header>
+    <div class="listener-grid">
+      <div class="collage" id="collage"></div>
+      <div class="listener-side">
+      <div>
+        <h3 class="side-h">Seven ways a song becomes mine</h3>
+        <div class="behav" id="behav" role="group" aria-label="How I interact with music"></div>
+        <div class="behav-info" id="behavInfo" aria-live="polite"></div>
+      </div>
+      <div class="diary">
+        <h3>Listening diary</h3>
+        <p class="dsub">what was playing, and why it mattered</p>
+        <div id="diaryList"></div>
+        <form class="diary-form edit-only" id="diaryForm">
+          <input id="d-date" placeholder="Date or moment" maxlength="40">
+          <input id="d-song" placeholder="Song — Artist" maxlength="90">
+          <textarea id="d-text" placeholder="What it made me feel" maxlength="280"></textarea>
+          <button class="btn solid" type="submit">Add diary entry</button>
+        </form>
+      </div>
+      </div>
+    </div>
+    <div class="keep">
+      <div>
+        <h3>Lyrics I keep</h3>
+        <div class="lyric-notes" id="lyricNotes"></div>
+      </div>
+      <div>
+        <h3>Songs that mean something</h3>
+        <div class="jcard"><ol id="meaningful"></ol></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WALL ================= -->
+<section id="wall" data-stage="5">
+  <div class="tear"></div>
+  <div class="wrap">
+    <header class="stage-head">
+      <p class="stage-no"><span>Your turn</span> The collective wall</p>
+      <h2 class="stage-title">Pin a song <em>that means something to you.</em></h2>
+      <p class="lede">Leave one song and why it matters.</p>
+    </header>
+    <div class="wall-grid">
+      <form class="card-form" id="wallForm" autocomplete="off">
+        <h3>a song that stays with me…</h3>
+        <label for="w-song">Song<input id="w-song" maxlength="80" required placeholder="Song title"></label>
+        <label for="w-artist">Artist<input id="w-artist" maxlength="60" placeholder="Who sings it"></label>
+        <label for="w-note">Why it matters<textarea id="w-note" maxlength="160" placeholder="A memory, a person, a place…"></textarea></label>
+        <label for="w-name">Your name (optional)<input id="w-name" maxlength="30" placeholder="First name or initials"></label>
+        <button type="submit">Pin it to the wall</button>
+        <p class="form-msg" id="formMsg" aria-live="polite"></p>
+      </form>
+      <div>
+        <div class="wall-meta"><span id="wallCount">Connecting to the wall…</span><span id="wallMode"></span></div>
+        <div class="board" id="board"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<nav class="journey" id="journey" aria-label="Journey from inspiration to listener">
+  <button class="jn" id="jPrev" type="button" aria-label="Previous stage">←</button>
+  <div class="stops" id="stops"></div>
+  <button class="jn" id="jNext" type="button" aria-label="Next stage">→</button>
+</nav>
+
+<div class="world" id="world" role="dialog" aria-modal="true" aria-label="Genre world" hidden></div>
+<input type="file" id="filePick" accept="image/*" hidden>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* =====================================================================
+   EDITABLE CONTENT — change anything below, or use "Edit content" on the page.
+   Square brackets [like this] mark placeholders waiting for your own picks.
+   ===================================================================== */
+const CONTENT = {
+  inspiration: [
+    { cap:"Personal experiences", sub:"the diary page", art:"diary", tint:"#f3d6c1", deep:"#c27a48",
+      note:"Breakups, first jobs, sleepless weeks. Real details make a song feel true." },
+    { cap:"People & relationships", sub:"someone, always", art:"people", tint:"#dcd5ec", deep:"#7a6bb0",
+      note:"Most songs are written to someone, named or not." },
+    { cap:"Travel & places", sub:"window seat", art:"places", tint:"#dfe6cf", deep:"#6a8a52",
+      note:"Hometowns, train windows, monsoon streets. A place gives a song its setting." },
+    { cap:"Memories", sub:"rewind", art:"cassette", tint:"#f2e3b3", deep:"#b08a1e",
+      note:"Old rooms, old summers. Nostalgia is one of songwriting's oldest engines." },
+    { cap:"Emotions", sub:"felt first, written later", art:"heart", tint:"#efc4c4", deep:"#c05a5a",
+      note:"Sometimes the feeling comes first. The song is how the artist makes sense of it." },
+    { cap:"Other music & art", sub:"every artist is a listener", art:"vinyl", tint:"#cfdbe6", deep:"#55789c",
+      note:"Every artist is a listener first. Samples, films and books leak into new songs." },
+    { cap:"Everyday observations", sub:"overheard at the chai stall", art:"chai", tint:"#cde2dc", deep:"#3f8a78",
+      note:"An overheard line, a 1am text. Small details become the most quoted lyrics." }
+  ],
+
+  studio: {
+    mic:   { title:"Microphone", role:"recording vocals", text:"Vocals are recorded take by take, and the best moments are stitched together." },
+    note:  { title:"Notebook", role:"songwriting & lyrics", text:"Ideas become lyrics, hooks and a structure: verse, chorus, bridge." },
+    inst:  { title:"Guitar & piano", role:"composition", text:"Chords and melody. Many songs start as a simple loop on guitar or piano." },
+    mix:   { title:"Mixing console", role:"production & mixing", text:"Producers build the sound, then mixing balances every part so it sounds whole." },
+    phones:{ title:"Headphones", role:"listening & refining", text:"The artist becomes the first listener, refining until it sounds right everywhere." }
+  },
+
+  spotify: [
+    { k:"dist", label:"Distribution", text:"The finished track is uploaded and joins a catalogue of millions." },
+    { k:"edit", label:"Editorial playlists", text:"Curators group songs by mood and moment. One placement can change a career." },
+    { k:"algo", label:"Recommendations", text:"Algorithms learn from skips, saves and replays to build personal mixes." },
+    { k:"data", label:"Listening data", text:"Every play becomes data that shapes charts, royalties and what gets recommended next." }
+  ],
+
+  /* Album covers: img = uploaded copy on the published page; file = local copy in covers/ */
+  genres: {
+    indie: {
+      name:"Indie / Alternative", short:"Indie / Alt",
+      feelings:["dreamy","reflective","introspective","nostalgic"],
+      artists:[
+        { name:"Bakar", album:"Hell N Back", img:"/_blob/5b0bcfb6a3958a7aa82148470272c9ab", file:"covers/indie_hell_n_back.jpg" },
+        { name:"Dan Auerbach", album:"Never in My Wildest Dreams", img:"/_blob/15c0602ca4f95a481776e4c469cc3806", file:"covers/indie_never_in_my_wildest_dreams.jpg" },
+        { name:"Malcolm Todd", album:"Earrings", img:"/_blob/d08141a1fe96e147c42a7f68e581bb71", file:"covers/indie_earrings.jpg" },
+        { name:"Declan McKenna", album:"Brazil", img:"/_blob/96b7b03331afe61de4c6b794fb414b5c", file:"covers/indie_brazil.jpg" }
+      ],
+      tracks:[
+        { t:"Cigarette Daydreams", a:"Cage the Elephant" }, { t:"Bad Kids", a:"Black Lips" }, { t:"Where'd All the Time Go?", a:"Dr. Dog" },
+        { t:"Love My Way", a:"The Psychedelic Furs" }, { t:"Sailor Song", a:"Gigi Perez" }, { t:"About You", a:"The 1975" }, { t:"We Are Young", a:"fun." }
+      ]
+    },
+    hiphop: {
+      name:"R&B / Rap", short:"R&B / Rap",
+      feelings:["energetic","confident","motivated","empowered"],
+      artists:[
+        { name:"A.CHAL", album:"000000", img:"/_blob/ce64b1508ec25bc15031f3f4d778af37", file:"covers/rnb_000000.jpg" },
+        { name:"Drake", album:"Sticky", img:"/_blob/97549bfc573bd009b65bec406a1146da", file:"covers/rnb_sticky.jpg" },
+        { name:"Don Toliver", album:"Secondhand", img:"/_blob/d6298a7b10af9aa16f3d46bdc3518cab", file:"covers/rnb_secondhand.jpg" },
+        { name:"Drake", album:"Pain 1993", img:"/_blob/d6c29a513149a222c470ee9669243e8c", file:"covers/rnb_pain_1993.jpg" }
+      ],
+      tracks:[
+        { t:"Candy Paint", a:"Post Malone" }, { t:"Monica Lewinsky", a:"SAINt JHN" }, { t:"Hold On, We're Going Home", a:"Drake" },
+        { t:"Come N Go", a:"Yeat" }, { t:"Circles", a:"Post Malone" }, { t:"E85", a:"Don Toliver" }, { t:"Get It Together", a:"Drake" }
+      ]
+    },
+    bolly: {
+      name:"Bollywood / Indie Hindi", short:"Bollywood / Indie Hindi",
+      feelings:["comfort","familiarity","nostalgia","emotional connection"],
+      artists:[
+        { name:"King", album:"Tu Aake Dekhle", img:"/_blob/a4f8a9fe357a45f060ef7d923913555f", file:"covers/bolly_tu_aake_dekhle.jpg" },
+        { name:"Pritam", album:"Jiyein Kyun", img:"/_blob/4e8f3943bdd76fca65bf0c0dd432fa7e", file:"covers/bolly_jiyein_kyun.jpg" },
+        { name:"Juss & MixSingh", album:"Suniyan Suniyan", img:"/_blob/18e07b167336cf9ea9dcee2b14f85742", file:"covers/bolly_suniyan_suniyan.jpg" },
+        { name:"Rahat Fateh Ali Khan", album:"Rishte Naate", img:"/_blob/cfae88672c269580ca952476bae4a29c", file:"covers/bolly_rishte_naate.jpg" }
+      ],
+      tracks:[
+        { grp:"Bollywood" },
+        { t:"Tum Mile", a:"Neeraj Shridhar" }, { t:"Maahi Ve", a:"A.R. Rahman" }, { t:"Khabar Nahi", a:"Shreya Ghoshal" },
+        { t:"Mere Bina", a:"Pritam" }, { t:"Abhi Kuch Dino Se", a:"Pritam" }, { t:"Laapata", a:"KK" }, { t:"Is This Love", a:"Mohit Chauhan" },
+        { grp:"Indie Hindi" },
+        { t:"Gallan 4", a:"Talwiinder" }, { t:"Kamli", a:"HYDR" }, { t:"4U", a:"Maanu" }, { t:"Maan Meri Jaan", a:"King" },
+        { t:"Haseen", a:"Talwiinder" }, { t:"Do Pall", a:"Coachsahb" }, { t:"Laavan", a:"Jasmine Sandlas" }
+      ]
+    }
+  },
+
+  moods: [
+    { m:"Dreamy", g:"indie" }, { m:"Reflective", g:"indie" }, { m:"Nostalgic", g:"indie" }, { m:"Overthinking", g:"indie" },
+    { m:"Energetic", g:"hiphop" }, { m:"Confident", g:"hiphop" }, { m:"Need motivation", g:"hiphop" }, { m:"Unstoppable", g:"hiphop" },
+    { m:"Homesick", g:"bolly" }, { m:"Need comfort", g:"bolly" }, { m:"Sentimental", g:"bolly" }, { m:"Missing someone", g:"bolly" }
+  ],
+  moodWhy: {
+    indie:"For thoughts that need space.",
+    hiphop:"For energy and momentum.",
+    bolly:"For comfort and familiar voices."
+  },
+
+  listener: {
+    behaviours: [
+      { label:"Listening", text:"Sometimes background, sometimes full attention. Each does different work." },
+      { label:"Replaying", text:"Some songs I play twenty times in a row. Familiarity is part of the joy." },
+      { label:"Making playlists", text:"Playlists sort my emotional life: focus, the walk home, one person." },
+      { label:"Sharing", text:"Sending a song says 'this is how I feel' without explaining." },
+      { label:"Discovering", text:"Friends, films, reels and algorithms all shape what I end up loving." },
+      { label:"Attaching memories", text:"Three seconds of an intro can bring back a whole summer." },
+      { label:"Feeling & regulating", text:"Music helps me calm down, cheer up, or let myself be sad for a while." }
+    ],
+    diary: [
+      { date:"31 Dec 2025 · NYE", song:"Tu Aake Dekhle — King", text:"New Year's Eve in my friend's hometown. Her friends took us on a drive and we all belted this at the top of our lungs. Now whenever she and I play it in college, we get nostalgic." }
+    ],
+    lyrics: [
+      { text:"Slow down, you're doing fine", src:"Vienna — Billy Joel" },
+      { text:"I know everybody changes, but I hope that we don't", src:"u + me = <3 — Olivia Rodrigo" },
+      { text:"Imagination, life is your creation", src:"Barbie Girl — Aqua" },
+      { text:"Sometimes I wish that I could freeze the picture", src:"Slipping Through My Fingers — ABBA" },
+      { text:"You're my best friend and we're dancing in this world alone", src:"A World Alone — Lorde" },
+      { text:"The rest is still unwritten", src:"Unwritten — Natasha Bedingfield" }
+    ],
+    meaningful: [
+      { song:"2002", why:"Anne-Marie" },
+      { song:"This Town", why:"Niall Horan" },
+      { song:"Eastside", why:"benny blanco" },
+      { song:"Strawberries & Cigarettes", why:"Troye Sivan" },
+      { song:"Stuck with U", why:"Ariana Grande" }
+    ]
+  }
+};
+/* ===================== end of editable content ===================== */
+
+const GENRES = ["indie","hiphop","bolly"];
+const STAGES = [
+  { id:"s1", label:"Inspiration" }, { id:"s2", label:"Artist" }, { id:"s3", label:"Spotify" },
+  { id:"s4", label:"Mood" }, { id:"s5", label:"Listener" }, { id:"wall", label:"Your song" }
+];
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dget = (o, p) => p.split(".").reduce((a, k) => a == null ? undefined : a[k], o);
+let O = {};            // text / link / image overrides saved by edit mode
+let DIARY = null;      // null = show the example entries from CONTENT
+const val = k => (k in O) ? O[k] : (dget(CONTENT, k) ?? "");
+const ed = (k, tag="span", cls="") => `<${tag} class="${cls}" data-k="${k}">${esc(val(k))}</${tag}>`;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = { inViewer: typeof window.claude?.use === "function", db:null, assets:null, canEdit:false, mode:"pending" };
+
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => t.hidden = true, 3200); }
+function rnd(seed){ let s = seed; return () => (s = (s * 9301 + 49297) % 233280) / 233280; }
+
+/* ---------- torn paper edges ---------- */
+function tearEdges(){
+  $$(".tear").forEach((el, i) => {
+    const r = rnd(i * 77 + 13); let pts = ["0% 100%"]; let x = 0;
+    while (x < 100){ pts.push(`${x.toFixed(2)}% ${(20 + r() * 70).toFixed(1)}%`); x += 0.8 + r() * 2.2; }
+    pts.push("100% 40%", "100% 100%");
+    el.style.clipPath = `polygon(${pts.join(",")})`;
+  });
+}
+
+/* ---------- journey map ---------- */
+const MAP = {
+  wide:{ w:1300, h:690, top:110, r:40, big:56, fs:28, caps:true,
+    pos:{ s1:[120,370], s2:[385,290], s3:[650,370], indie:[935,175], hiphop:[935,370], bolly:[935,565], s5:[1190,370] },
+    loop:"M1190 324 C1190 130 1150 46 1010 46 L300 46 C170 46 120 130 120 324",
+    label:"M120 324 C120 130 170 46 300 46 L1010 46 C1150 46 1190 130 1190 324",
+    loopLabel:"listeners feed back in: sharing · listening patterns · recommendations" },
+  tall:{ w:400, h:980, top:40, r:30, big:42, fs:24, caps:false,
+    pos:{ s1:[150,90], s2:[150,250], s3:[150,420], indie:[80,640], hiphop:[200,640], bolly:[320,640], s5:[150,920] },
+    loop:"M114 920 C56 920 22 880 22 800 L22 210 C22 130 56 90 112 90",
+    label:"M114 920 C56 920 22 880 22 800 L22 210 C22 130 56 90 112 90",
+    loopLabel:"sharing · data · recommendations" }
+};
+const NODES = [
+  { k:"s1", label:["Inspiration"], cap:"where it begins", fill:"#f1cfc9" },
+  { k:"s2", label:["The artist"], cap:"turning it into sound", fill:"#efe2c4" },
+  { k:"s3", label:["Spotify"], cap:"the gateway" },
+  { k:"indie", label:["Indie / Alt"], cap:"dreamy · reflective", fill:"#bcb0d6", g:"indie" },
+  { k:"hiphop", label:["R&B / Rap"], cap:"energy · confidence", fill:"#2a2624", g:"hiphop", dark:true },
+  { k:"bolly", label:["Bollywood / Indie Hindi"], tall:["Bollywood /","Indie Hindi"], cap:"comfort · home", fill:"#d9a6a1", g:"bolly" },
+  { k:"s5", label:["Listener: me"], cap:"where it becomes mine", fill:"#a9b897" }
+];
+const ICONS = {
+  s1:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+  s2:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
+  indie:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  hiphop:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+  bolly:'<circle cx="12" cy="12" r="2.5"/><path d="M12 9.5C10 6 10 3 12 2c2 1 2 4 0 7.5M14.5 12c3.5-2 6.5-2 7.5 0-1 2-4 2-7.5 0M12 14.5c2 3.5 2 6.5 0 7.5-2-1-2-4 0-7.5M9.5 12C6 14 3 14 2 12c1-2 4-2 7.5 0"/>',
+  s5:'<path d="M3 15v-3a9 9 0 0 1 18 0v3"/><rect x="2" y="14" width="5" height="7" rx="2"/><rect x="17" y="14" width="5" height="7" rx="2"/>'
+};
+function spotifyLogo(cx, cy, r, cls = ""){
+  const s = r / 50;
+  return `<g class="${cls}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="#1DB954" stroke="none"/><g transform="translate(${cx - r} ${cy - r}) scale(${s})" fill="none" stroke="#191414" stroke-linecap="round"><path d="M23 37C40 30 62 31 79 41" stroke-width="9"/><path d="M27 53C41 47 59 48 73 56" stroke-width="7.5"/><path d="M30 68C42 63 56 64 68 70" stroke-width="6"/></g></g>`;
+}
+function curve(a, b, vertical){
+  const [x1,y1] = a, [x2,y2] = b;
+  if (vertical){ const dy = (y2 - y1) / 2; return `M${x1} ${y1} C${x1} ${y1+dy} ${x2} ${y2-dy} ${x2} ${y2}`; }
+  const dx = (x2 - x1) / 2; return `M${x1} ${y1} C${x1+dx} ${y1} ${x2-dx} ${y2} ${x2} ${y2}`;
+}
+function nodeSvg(n, L, tall){
+  const [x,y] = L.pos[n.k], r = n.k === "s3" ? L.big : L.r;
+  const lines = (tall && n.tall) || n.label;
+  let txt = "";
+  if (tall && !n.g){
+    txt = `<text class="nl halo" x="${x + r + 14}" y="${y + 8}" style="font-size:${L.fs}px;text-anchor:start">${esc(lines.join(" "))}</text>`;
+  } else {
+    lines.forEach((t,i) => txt += `<text class="nl halo" x="${x}" y="${y + r + 32 + i*L.fs}" style="font-size:${L.fs}px">${esc(t)}</text>`);
+    if (L.caps) txt += `<text class="nc halo" x="${x}" y="${y + r + 32 + (lines.length-1)*L.fs + 24}">${esc(n.cap)}</text>`;
+  }
+  const s = r * 1.05 / 24;
+  const body = n.k === "s3" ? spotifyLogo(x, y, r, "blob")
+    : `<circle class="blob" cx="${x}" cy="${y}" r="${r}" fill="${n.fill}"/><g transform="translate(${x-12*s} ${y-12*s}) scale(${s})" fill="none" stroke="${n.dark ? "#fbf7f0" : "#2a2624"}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none">${ICONS[n.k]}</g>`;
+  return `<g class="node" tabindex="0" role="button" data-go="${n.k}" aria-label="${esc(n.label.join(" "))}">${body}${txt}</g>`;
+}
+function buildMap(){
+  const tall = matchMedia("(max-width:700px)").matches, L = tall ? MAP.tall : MAP.wide, P = L.pos;
+  const from = k => {
+    if (!(tall && GENRES.includes(k))) return P[k];
+    const n = NODES.find(m => m.k === k), lines = (n.tall || n.label).length;
+    return [P[k][0], P[k][1] + L.r + 32 + (lines - 1) * L.fs + 12];
+  };
+  const edges = [["s1","s2"],["s2","s3"],["s3","indie"],["s3","hiphop"],["s3","bolly"],["indie","s5"],["hiphop","s5"],["bolly","s5"]];
+  const paths = edges.map(([a,b]) => curve(from(a), P[b], tall));
+  const travel = [curve(P.s1,P.s2,tall), ...[["s2","s3"],["s3","hiphop"],["hiphop","s5"]].map(([a,b]) => curve(P[a],P[b],tall).replace(/^M[^C]+/,""))].join(" ");
+  $("#map").innerHTML = `<svg viewBox="0 ${L.top} ${L.w} ${L.h - L.top}" role="img" aria-label="Map: inspiration to artist to Spotify, branching into three genres, then to the listener">
+    <defs><path id="travelPath" d="${travel}"/></defs>
+    ${paths.map(d => `<path class="edge" d="${d}"/><path class="flow" d="${d}"/>`).join("")}
+    ${reduced ? "" : `<text class="traveler" text-anchor="middle" dominant-baseline="central">♪<animateMotion dur="10s" repeatCount="indefinite" rotate="0"><mpath href="#travelPath"/></animateMotion></text>`}
+    ${NODES.map(n => nodeSvg(n, L, tall)).join("")}
+  </svg>`;
+}
+
+/* ---------- stage 1: polaroids ---------- */
+const ART = {
+  diary:'<path d="M50 20C40 14 24 14 14 18V62C24 58 40 58 50 64C60 58 76 58 86 62V18C76 14 60 14 50 20ZM50 20V64M22 28H42M22 36H40M22 44H38M60 34C60 30 66 29 67 33C68 29 74 30 74 34C74 39 67 43 67 43C67 43 60 39 60 34Z"/>',
+  people:'<circle cx="24" cy="26" r="8"/><circle cx="76" cy="26" r="8"/><path d="M10 66C11 50 37 50 38 66M62 66C63 50 89 50 90 66"/><path d="M50 54C38 46 37 35 43 32C46 30.5 50 32.5 50 36C50 32.5 54 30.5 57 32C63 35 62 46 50 54Z"/>',
+  places:'<path d="M8 62L32 30L44 44L60 22L92 62ZM26 62L46 72M60 62L72 72"/><circle cx="78" cy="16" r="7"/>',
+  cassette:'<rect x="14" y="16" width="72" height="48" rx="4"/><circle cx="36" cy="38" r="7"/><circle cx="64" cy="38" r="7"/><path d="M36 31H64M26 64L32 54H68L74 64M20 22H80"/>',
+  heart:'<path d="M50 66C20 46 18 26 34 22C42 20 48 26 50 32C52 26 58 20 66 22C82 26 80 46 50 66Z"/><path d="M50 32L44 42L55 49L46 58L50 66"/>',
+  vinyl:'<circle cx="44" cy="42" r="28"/><circle cx="44" cy="42" r="20" stroke-dasharray="3 4"/><circle cx="44" cy="42" r="9"/><circle cx="44" cy="42" r="1.5"/><circle cx="86" cy="14" r="4"/><path d="M86 18L84 42L66 52M62 48L69 56"/>',
+  chai:'<path d="M26 36H70V52C70 62 62 68 48 68C34 68 26 62 26 52ZM70 41C82 41 82 55 70 55M38 28C34 22 42 18 38 12M50 28C46 22 54 18 50 12M62 28C58 22 66 18 62 12"/>'
+};
+function renderPolas(){
+  const r = rnd(5);
+  $("#polas").innerHTML = CONTENT.inspiration.map((p, i) => {
+    const rot = (r() * 10 - 5).toFixed(1), y = (i % 2 ? 18 : -6) + Math.round(r() * 10);
+    return `<div class="pola" role="button" tabindex="0" style="--r:${rot}deg;--y:${y}px" aria-expanded="false" data-i="${i}">
+      <div class="pola-in">
+        <div class="pf"><div class="photo img-slot" data-img="inspiration.${i}.img" style="background-color:${p.tint}">
+          <div class="ph-art" style="position:absolute;inset:0;display:grid;place-items:center"><svg viewBox="0 0 100 80" aria-hidden="true">${ART[p.art]}</svg></div>
+          <div class="img-tools edit-only"><span role="button" tabindex="0" data-pick="inspiration.${i}.img">＋ photo</span></div></div>
+          <div class="cap">${ed(`inspiration.${i}.cap`)}<small>${ed(`inspiration.${i}.sub`)}</small></div></div>
+        <div class="pf pb"><h3 style="color:${p.deep}">${esc(p.cap)}</h3>${ed(`inspiration.${i}.note`, "p")}<span class="back-hint">tap to turn back</span></div>
+      </div></div>`;
+  }).join("");
+}
+
+/* ---------- stage 2: studio ---------- */
+const tag = (n, x, y, word) => `<g class="pin"><circle cx="${x}" cy="${y}" r="15"/><text x="${x}" y="${y + 1}">${n}</text></g><text class="lbl" x="${x + 22}" y="${y + 8}">${word}</text>`;
+const STUDIO_SVG = `<svg viewBox="0 0 1000 600" role="group" aria-label="Recording studio with five objects">
+  <g filter="url(#wobble)">
+    <rect x="0" y="0" width="1000" height="500" fill="#d8d0e8"/>
+    <g fill="#c7bddd" stroke="#2a2624" stroke-width="1.5">${[24,76,882,934].flatMap(x => [36,88,140].map(y => `<rect x="${x}" y="${y}" width="46" height="46"/>`)).join("")}</g>
+    <rect x="0" y="500" width="1000" height="100" fill="#d9c7ae"/>
+    <path d="M0 500H1000" stroke="#2a2624" stroke-width="2"/>
+    <ellipse cx="500" cy="562" rx="320" ry="26" fill="#b4706c" opacity=".35"/>
+    <path d="M240 402H760V418H240Z" fill="#8a6a52" stroke="#2a2624" stroke-width="2"/>
+    <path d="M262 418V500M738 418V500" stroke="#2a2624" stroke-width="8"/>
+    <rect x="256" y="272" width="68" height="130" rx="6" fill="#2a2624"/>
+    <circle cx="290" cy="306" r="13" fill="#4a4441"/><circle cx="290" cy="356" r="24" fill="#4a4441"/><circle cx="290" cy="356" r="8" fill="#2a2624"/>
+    <rect x="676" y="272" width="68" height="130" rx="6" fill="#2a2624"/>
+    <circle cx="710" cy="306" r="13" fill="#4a4441"/><circle cx="710" cy="356" r="24" fill="#4a4441"/><circle cx="710" cy="356" r="8" fill="#2a2624"/>
+    <path d="M22 500V440H66V500" fill="#b4706c" stroke="#2a2624" stroke-width="2"/>
+    <path d="M44 440C24 400 32 372 16 352M44 440C48 386 66 376 62 342M44 440C64 414 80 404 88 378" fill="none" stroke="#5b6e50" stroke-width="5" stroke-linecap="round"/>
+    <path d="M786 436H884V448H786Z" fill="#8a6a52" stroke="#2a2624" stroke-width="2"/>
+    <path d="M796 448L790 500M874 448L880 500" stroke="#2a2624" stroke-width="6"/>
+  </g>
+
+  <g class="obj" data-obj="mic" tabindex="0" role="button" aria-label="Microphone: recording vocals">
+    <rect class="hit" x="105" y="128" width="150" height="452" rx="14"/>
+    <g class="art" filter="url(#wobble)">
+      <ellipse cx="160" cy="570" rx="50" ry="10" fill="#2a2624"/>
+      <path d="M160 570V320L215 252" stroke="#2a2624" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <rect x="198" y="180" width="40" height="76" rx="20" fill="#3b3330" stroke="#2a2624" stroke-width="2" transform="rotate(28 218 218)"/>
+      <path d="M207 197L236 212M202 208L231 223M197 219L226 234" stroke="#7a6c63" stroke-width="2"/>
+    </g>
+    ${tag(1, 150, 150, "mic")}
+  </g>
+
+  <g class="obj" data-obj="phones" tabindex="0" role="button" aria-label="Headphones: listening and refining">
+    <rect class="hit" x="428" y="58" width="152" height="168" rx="14"/>
+    <g class="art" filter="url(#wobble)">
+      <rect x="483" y="66" width="34" height="14" rx="3" fill="#8a6a52" stroke="#2a2624" stroke-width="2"/>
+      <path d="M500 80V100C500 110 511 110 511 100" stroke="#2a2624" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M457 172C455 92 545 92 543 172" fill="none" stroke="#b4706c" stroke-width="13" stroke-linecap="round"/>
+      <rect x="439" y="160" width="34" height="56" rx="12" fill="#2a2624"/>
+      <rect x="527" y="160" width="34" height="56" rx="12" fill="#2a2624"/>
+    </g>
+    ${tag(5, 588, 150, "headphones")}
+  </g>
+
+  <g class="obj" data-obj="mix" tabindex="0" role="button" aria-label="Mixing console: production and mixing">
+    <rect class="hit" x="340" y="272" width="320" height="136" rx="12"/>
+    <g class="art" filter="url(#wobble)">
+      <path d="M345 402H655L637 322H363Z" fill="#2a2624" stroke="#2a2624" stroke-width="2"/>
+      ${Array.from({length:10},(_,i)=>{const x=384+i*26;const k=338+((i*37)%5)*6;return `<path d="M${x} 352V392" stroke="#5c5450" stroke-width="3"/><rect x="${x-6}" y="${k+18}" width="12" height="7" fill="${["#d9a6a1","#a9b897","#bcb0d6"][i%3]}"/><circle cx="${x}" cy="338" r="4.5" fill="#fbf7f0"/>`}).join("")}
+    </g>
+    ${tag(4, 372, 292, "mixing console")}
+  </g>
+
+  <g class="obj" data-obj="note" tabindex="0" role="button" aria-label="Notebook: songwriting and lyrics">
+    <rect class="hit" x="772" y="270" width="124" height="170" rx="12"/>
+    <g class="art" filter="url(#wobble)" transform="rotate(-6 838 384)">
+      <rect x="800" y="334" width="76" height="100" fill="#fbf7f0" stroke="#2a2624" stroke-width="2"/>
+      ${Array.from({length:5},(_,i)=>`<circle cx="809" cy="${346+i*20}" r="3" fill="none" stroke="#2a2624" stroke-width="1.5"/>`).join("")}
+      <path d="M820 352H866M820 366H862M820 380H866M820 394H856" stroke="#bcb0d6" stroke-width="2"/>
+      <path d="M822 357C832 350 840 360 848 352S860 356 864 350" stroke="#2a2624" stroke-width="1.5" fill="none"/>
+      <path d="M836 410C836 405 842 404 843 408C844 404 850 405 850 410C850 415 843 419 843 419C843 419 836 415 836 410Z" fill="#d9a6a1" stroke="#2a2624" stroke-width="1.2"/>
+    </g>
+    ${tag(2, 784, 296, "notebook")}
+  </g>
+
+  <g class="obj" data-obj="inst" tabindex="0" role="button" aria-label="Guitar and piano: composition">
+    <rect class="hit" x="860" y="196" width="132" height="404" rx="14"/>
+    <g class="art" filter="url(#wobble)">
+      <path d="M948 228L926 418" stroke="#7b4a32" stroke-width="14" stroke-linecap="round"/>
+      <rect x="938" y="206" width="22" height="34" rx="4" fill="#5a3726" transform="rotate(6 949 223)"/>
+      <circle cx="922" cy="440" r="38" fill="#dc9a36" stroke="#2a2624" stroke-width="2"/>
+      <circle cx="916" cy="520" r="52" fill="#dc9a36" stroke="#2a2624" stroke-width="2"/>
+      <circle cx="920" cy="462" r="13" fill="#2a2624"/>
+      <path d="M902 540H930" stroke="#2a2624" stroke-width="5"/>
+      <path d="M944 236L916 540M950 237L922 540" stroke="#fbf7f0" stroke-width=".9"/>
+    </g>
+    ${tag(3, 808, 580, "guitar")}
+  </g>
+</svg>`;
+const STUDIO_ORDER = ["mic","note","inst","mix","phones"];
+function showStudio(k){
+  const S = CONTENT.studio;
+  $$("#studioSvg .obj").forEach(g => g.classList.toggle("on", g.dataset.obj === k));
+  $$("#studioChips .chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.obj === k)));
+  const card = $("#studioCard");
+  const chips = `<div class="chips" id="studioChips">${STUDIO_ORDER.map((o,i)=>`<button type="button" class="chip" data-obj="${o}" aria-pressed="${o===k}">${i+1}. ${esc(S[o].title)}</button>`).join("")}</div>`;
+  if (!k){ card.innerHTML = `<p class="kicker">The studio</p><h3>Tap an object.</h3><p class="role">five tools, one song</p>${chips}`; return; }
+  const i = STUDIO_ORDER.indexOf(k);
+  card.innerHTML = `<p class="kicker">Step ${i+1} of 5 in the studio</p>${ed(`studio.${k}.title`,"h3")}${ed(`studio.${k}.role`,"p","role")}${ed(`studio.${k}.text`,"p","body")}${chips}`;
+}
+
+/* ---------- stage 3: spotify hub ---------- */
+const HUB = {
+  wide:{ w:1000, h:500, hub:[500,215,112], fs:18, inY:0, top:60, sats:[[185,95],[815,95],[185,330],[815,330]], ends:[[167,500],[500,500],[833,500]] },
+  tall:{ w:400, h:540, hub:[200,290,92], fs:15, inY:0, sats:[[102,26],[298,26],[102,80],[298,80]], ends:[[200,540],[200,540],[200,540]] }
+};
+let curSat = -1;
+function renderHubDiagram(){
+  const tall = matchMedia("(max-width:700px)").matches, L = tall ? HUB.tall : HUB.wide, [hx,hy,hr] = L.hub;
+  const colors = ["#6c5f9e","#2a2624","#b4706c"];
+  const sats = CONTENT.spotify.map((s,i) => { const [x,y] = L.sats[i], w = s.label.length * L.fs * 0.56 + 34, h = L.fs * 2.2;
+    return `<g class="sat" data-sat="${i}" role="button" tabindex="0" aria-pressed="false"><rect x="${x - w/2}" y="${y - h/2}" width="${w}" height="${h}" rx="${h/2}"/><text x="${x}" y="${y}" style="font-size:${L.fs}px">${esc(s.label)}</text></g>`; }).join("");
+  const spokes = L.sats.map(([x,y]) => `<path class="spoke" d="M${x} ${y} L${hx} ${hy}"/>`).join("");
+  const branches = L.ends.map(([x,y],i) => `<path class="branch" stroke="${colors[i]}" d="M${hx} ${hy + hr - 10} C${hx} ${hy + hr + 70} ${x} ${y - 80} ${x} ${y}"/>`).join("");
+  $("#hubDiagram").innerHTML = `<svg viewBox="0 ${L.top || 0} ${L.w} ${L.h - (L.top || 0)}" role="group" aria-label="Spotify at the centre, four platform functions around it, branching into three genre worlds">
+    ${L.inY ? `<text class="in" x="${hx}" y="${L.inY}">from the studio ↓</text><path class="spoke" d="M${hx} ${L.inY + 14} L${hx} ${hy}"/>` : ""}
+    ${spokes}${branches}
+    <circle class="ring" cx="${hx}" cy="${hy}" r="${hr + 16}"/>
+    ${spotifyLogo(hx, hy, hr)}
+    ${sats}</svg>`;
+  showSat(curSat);
+}
+function renderPortals(){
+  const decor = {
+    indie:`<span class="sun"></span><span class="haze" style="width:120px;height:120px;left:20px;top:110px"></span><span class="haze" style="width:90px;height:90px;right:60px;top:200px;animation-delay:-4s"></span>`,
+    hiphop:`<div class="bars">${Array.from({length:16},(_,i)=>`<i style="animation-delay:-${(i*0.083).toFixed(2)}s"></i>`).join("")}</div><span class="sticker">VOL ↑ 11</span>`,
+    bolly:`<div class="toran">${"<i></i>".repeat(11)}</div>`
+  };
+  const names = { indie:`Indie /<br>Alternative`, hiphop:`R&amp;B<br><i>/ Rap</i>`, bolly:`Bollywood /<br>Indie Hindi` };
+  $("#branches").innerHTML = GENRES.map((g,i) => { const G = CONTENT.genres[g];
+    return `<button type="button" class="portal p-${g}" data-world="${g}">${decor[g]}
+      <span class="pt-in"><span class="pt-k">World ${i+1} of 3</span>
+      <span class="pt-covers">${[0,1,2].map(j => `<span class="mini img-slot" data-img="genres.${g}.artists.${j}.img" style="--r:${[-6,4,-2][j]}deg"><span class="ph-art" style="background:${COVER_ART[g](j)}"></span></span>`).join("")}</span>
+      <span class="pt-name">${names[g]}</span>
+      <span class="pt-feel">${G.feelings.map(f=>`<span>${esc(f)}</span>`).join("")}</span>
+      <span class="pt-meta">${G.artists.length + G.tracks.filter(t => !t.grp).length} songs</span>
+      <span class="pt-go">step inside →</span></span></button>`; }).join("");
+}
+function showSat(i){
+  curSat = i;
+  $$("#hubDiagram .sat").forEach(b => { const on = +b.dataset.sat === i; b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+  $("#satInfo").innerHTML = i < 0 ? `<b>Inside the gateway</b>Tap a label.` : `<b>${esc(CONTENT.spotify[i].label)}</b>${ed(`spotify.${i}.text`)}`;
+}
+
+/* ---------- stage 4: universe ---------- */
+function renderUniverse(){
+  $("#moods").innerHTML = CONTENT.moods.map((m,i) => `<button type="button" data-mood="${i}" aria-pressed="false">${esc(m.m)}</button>`).join("");
+  renderMood(-1);
+}
+function renderMood(i){
+  $$("#moods button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.mood === i)));
+  const box = $("#moodResult");
+  if (i < 0){ box.className = "mood-result"; box.innerHTML = `<span class="mr-k">Your recommendation</span><span class="mr-g">Pick a feeling.</span><span class="mr-w">I'll match you to a world.</span>`; return; }
+  const g = CONTENT.moods[i].g, G = CONTENT.genres[g];
+  box.className = `mood-result r-${g}`;
+  const m = CONTENT.moods[i].m, lead = /^(Need|Missing|Overthinking)/.test(m) ? `${m}?` : `Feeling ${m.toLowerCase()}?`;
+  box.innerHTML = `<span class="mr-k">${esc(lead)} Try</span><span class="mr-g">${esc(G.name)}</span><span class="mr-w">${esc(CONTENT.moodWhy[g])}</span>
+    <div class="row"><button type="button" class="btn solid" data-world="${g}">Enter this world →</button></div>`;
+}
+
+/* ---------- genre worlds ---------- */
+let worldG = null, lastFocus = null;
+const COVER_ART = {
+  indie:(j)=>[`radial-gradient(circle at 30% 35%,#f6d9cf 0 18%,transparent 19%),linear-gradient(160deg,#a99fcf,#6c5f9e)`,`radial-gradient(circle at 70% 70%,#fbf7f0 0 10%,transparent 40%),linear-gradient(200deg,#b3bfd1,#7f8fb0)`,`linear-gradient(180deg,#e9d5e0 0 50%,#9c8dbd 50% 100%)`,`radial-gradient(ellipse at 50% 110%,#d9a6a1 0 40%,transparent 41%),linear-gradient(#cfc6e2,#8e83b8)`][j],
+  hiphop:(j)=>[`radial-gradient(circle,#d9a6a1 0 13%,#1c1a19 13.5% 15%,transparent 15.5%),repeating-radial-gradient(circle,#2a2725 0 3px,#33302d 3px 4px)`,`radial-gradient(#f6efe4 1.5px,transparent 1.8px) 0 0/9px 9px,#3b3330`,`linear-gradient(135deg,#a9b897 0 50%,#1c1a19 50%)`,`repeating-linear-gradient(0deg,#f6efe4 0 6px,#1c1a19 6px 22px)`][j],
+  bolly:(j)=>[`radial-gradient(circle,#dc9a36 0 22%,#7b2f3c 23% 30%,transparent 31%),repeating-conic-gradient(#e7b0a6 0 15deg,#f3d2c4 15deg 30deg)`,`linear-gradient(180deg,#7b2f3c,#dc9a36)`,`radial-gradient(circle at 50% 40%,#fff6e8 0 14%,transparent 15%),linear-gradient(#b4706c,#5b2330)`,`repeating-radial-gradient(circle,#dc9a36 0 6px,#efc3b8 6px 14px)`][j]
+};
+function trackGroups(G, p){
+  const groups = []; let cur = null;
+  G.tracks.forEach((t, j) => { if (t.grp || !cur){ cur = { name: t.grp || "", rows: [] }; groups.push(cur); } if (!t.grp) cur.rows.push(j); });
+  return groups.map(gr => `<div class="tracks">${gr.name ? `<h4 class="tg-h">${esc(gr.name)}</h4>` : ""}<ol>${gr.rows.map(j => `<li><span>${ed(`${p}.tracks.${j}.t`,"span","tt")}<br>${ed(`${p}.tracks.${j}.a`,"span","ta")}</span><span class="tm${G.tracks[j].fav ? " fav" : ""}">${G.tracks[j].fav ? "★ fav" : ""}</span></li>`).join("")}</ol></div>`).join("");
+}
+function openWorld(g){
+  if (!document.querySelector("#world").hidden && worldG === g) return;
+  lastFocus = lastFocus || document.activeElement; worldG = g;
+  const w = $("#world"), G = CONTENT.genres[g], p = `genres.${g}`, gi = GENRES.indexOf(g), r = rnd(gi * 31 + 3);
+  const bg = { indie:`<b></b>${Array.from({length:6},()=>`<i style="width:${160+r()*200|0}px;height:${160+r()*200|0}px;left:${r()*90|0}%;top:${r()*90|0}%;animation-delay:-${r()*14|0}s"></i>`).join("")}`,
+    hiphop:`<div class="bigbars">${Array.from({length:14},(_,i)=>`<i style="animation-delay:-${(i*0.11).toFixed(2)}s"></i>`).join("")}</div>`,
+    bolly:`<div class="mandala"></div><div class="toran">${"<i></i>".repeat(14)}</div>` }[g];
+  const title = { indie:`Indie /<br>Alternative`, hiphop:`R&amp;B <span>/ Rap</span>`, bolly:`Bollywood /<br>Indie Hindi` }[g];
+  w.className = `world w-${g}`;
+  w.setAttribute("aria-label", `${G.name} world`);
+  w.innerHTML = `<div class="w-bg" aria-hidden="true">${bg}</div>
+    <div class="w-top"><div class="w-tabs">${GENRES.map(x=>`<button type="button" data-world="${x}" aria-current="${x===g}"><span>${esc(CONTENT.genres[x].short)}</span></button>`).join("")}</div>
+      <button type="button" class="w-close" id="wClose">Back to the universe ✕</button></div>
+    <div class="w-wrap">
+      <header class="w-head"><p class="w-eyebrow">Genre world ${gi+1} of 3</p><h2 class="w-title">${title}</h2>
+        <ul class="w-feel">${G.feelings.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></header>
+      <h3 class="w-sec-h">On repeat</h3>
+      <div class="covers">${G.artists.map((a,j)=>`<div class="cover"><div class="art img-slot" data-img="${p}.artists.${j}.img"><div class="ph-art" style="background:${COVER_ART[g](j % 4)}"><em>cover coming</em></div>${a.fav ? `<span class="fav">★ fav</span>` : ""}<div class="img-tools edit-only"><span role="button" tabindex="0" data-pick="${p}.artists.${j}.img">＋ cover</span></div></div>${ed(`${p}.artists.${j}.album`,"span","ca")}${ed(`${p}.artists.${j}.name`,"span","cb")}</div>`).join("")}</div>
+      <h3 class="w-sec-h">More songs</h3>
+      <div class="tgroups">${trackGroups(G, p)}</div>
+    </div>`;
+  w.hidden = false; w.scrollTop = 0;
+  document.documentElement.classList.add("locked");
+  applyAll();
+  $("#wClose").focus({ preventScroll:true });
+}
+function closeWorld(){
+  const w = $("#world"); if (w.hidden) return;
+  w.hidden = true; w.innerHTML = ""; worldG = null;
+  document.documentElement.classList.remove("locked");
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll:true }); lastFocus = null;
+}
+
+/* ---------- stage 5: listener ---------- */
+const COLLAGE = `<svg viewBox="0 22 600 598" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Collage of a person listening to music on headphones, eyes closed">
+  <g filter="url(#wobble)">
+    <rect x="40" y="40" width="380" height="460" fill="#dcd5ec" transform="rotate(-4 230 270)"/>
+    <rect x="250" y="120" width="300" height="380" fill="#f1cfc9" transform="rotate(5 400 310)"/>
+    <circle cx="470" cy="110" r="70" fill="#a9b897"/>
+    <path d="M110 620C120 520 200 470 300 470C400 470 480 520 490 620Z" fill="#5b6e50" stroke="#2a2624" stroke-width="2"/>
+    <path d="M300 470L280 520M300 470L320 520" stroke="#2a2624" stroke-width="2"/>
+    <path d="M268 400V475H332V400" fill="#e2bfa8" stroke="#2a2624" stroke-width="2"/>
+    <ellipse cx="300" cy="320" rx="96" ry="112" fill="#e9c9b2" stroke="#2a2624" stroke-width="2"/>
+    <path d="M204 330C190 220 240 186 300 186C370 186 414 230 398 330C392 280 360 250 300 246C246 244 214 270 204 330Z" fill="#2a2624"/>
+    <path d="M252 334Q266 344 280 334M320 334Q334 344 348 334" fill="none" stroke="#2a2624" stroke-width="3" stroke-linecap="round"/>
+    <path d="M286 384Q300 394 314 384" fill="none" stroke="#2a2624" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="246" cy="366" r="12" fill="#d9a6a1" opacity=".6"/><circle cx="354" cy="366" r="12" fill="#d9a6a1" opacity=".6"/>
+    <path d="M198 310C190 170 410 170 402 310" fill="none" stroke="#b4706c" stroke-width="18" stroke-linecap="round"/>
+    <rect x="172" y="290" width="46" height="84" rx="18" fill="#2a2624"/>
+    <rect x="382" y="290" width="46" height="84" rx="18" fill="#2a2624"/>
+    <path d="M150 300C130 320 130 350 150 370M128 284C100 316 100 354 128 386M450 300C470 320 470 350 450 370M472 284C500 316 500 354 472 386" fill="none" stroke="#6c5f9e" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text class="note" x="90" y="150" font-size="46" fill="#6c5f9e">♪</text>
+  <text class="note" x="500" y="250" font-size="40" fill="#2a2624" style="animation-delay:-2s">♫</text>
+  <text class="note" x="470" y="508" font-size="34" fill="#b4706c" style="animation-delay:-3.5s">♪</text>
+  <text x="300" y="590" text-anchor="middle" font-family="MTJAS Hand, cursive" font-size="30" fill="#fbf7f0">me, somewhere between songs</text>
+</svg>`;
+function renderListener(){
+  $("#collage").innerHTML = COLLAGE;
+  const r = rnd(21);
+  $("#behav").innerHTML = CONTENT.listener.behaviours.map((b,i) => `<button type="button" data-beh="${i}" aria-pressed="false" style="--r:${(r()*6-3).toFixed(1)}deg">${esc(b.label)}</button>`).join("");
+  showBeh(-1);
+  const tints = ["#f6e7b8","#dcd5ec","#dfe6cf","#f1cfc9"];
+  $("#lyricNotes").innerHTML = CONTENT.listener.lyrics.map((_,i) => `<div class="lnote" style="background:${tints[i%4]};--r:${(r()*2-1).toFixed(1)}deg"><span class="tape"></span>“${ed(`listener.lyrics.${i}.text`)}”<small>${ed(`listener.lyrics.${i}.src`)}</small></div>`).join("");
+  $("#meaningful").innerHTML = CONTENT.listener.meaningful.map((_,i) => `<li>${ed(`listener.meaningful.${i}.song`,"span","js")}${ed(`listener.meaningful.${i}.why`,"span","jw")}</li>`).join("");
+  renderDiary();
+}
+function showBeh(i){
+  $$("#behav button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.beh === i)));
+  $("#behavInfo").innerHTML = i < 0 ? `<b>Tap a label.</b>` : `<b>${esc(CONTENT.listener.behaviours[i].label)}</b>${ed(`listener.behaviours.${i}.text`)}`;
+}
+function renderDiary(){
+  const list = DIARY ?? CONTENT.listener.diary;
+  const editing = document.body.classList.contains("editing");
+  $("#diaryList").innerHTML = list.length ? list.map((e,i) => `<div class="entry"><p class="e-meta"><span>${esc(e.date)}</span><span class="e-song">${esc(e.song)}</span>${e.example ? `<span class="ex">example</span>` : ""}</p><p class="e-text">${esc(e.text)}</p>${editing ? `<button type="button" class="del" data-diary-del="${i}" aria-label="Delete entry">×</button>` : ""}</div>`).join("")
+    : `<p class="e-text hand" style="font-size:22px">No entries yet.</p>`;
+}
+
+/* ---------- apply overrides everywhere ---------- */
+function applyAll(){
+  const a = document.activeElement;
+  $$("[data-k]").forEach(el => { if (el !== a){ const v = val(el.dataset.k); if (el.textContent !== v) el.textContent = v; } });
+  $$("[data-img]").forEach(el => { const k = el.dataset.img; let v = val(k); if (!store.inViewer && v.startsWith("/_blob/")) v = dget(CONTENT, k.replace(/\.img$/, ".file")) || v; el.classList.toggle("has-img", !!v); el.style.backgroundImage = v ? `url("${v.replace(/"/g,"%22")}")` : ""; });
+  renderDiary();
+}
+
+/* ---------- persistence ---------- */
+const LS = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } } };
+let saveT = null, busy = false, dirty = false;
+function setSaveState(t){ $("#saveState").textContent = t; }
+function queueSave(){ dirty = true; setSaveState("Saving…"); clearTimeout(saveT); saveT = setTimeout(flush, 700); }
+async function flush(){
+  if (busy || !dirty) return; busy = true; dirty = false;
+  try {
+    if (store.db) await store.db.doc("site/content").set({ o:O, diary:DIARY, updatedAt:Date.now() });
+    else if (!LS.set("mtjas-content", { o:O, diary:DIARY })) throw { message:"This browser blocked local storage." };
+    setSaveState(store.db ? "Saved for everyone" : "Saved in this browser");
+  } catch (e) { setSaveState("Not saved: " + (e?.code === "not_granted" ? "you don't have edit access" : (e?.message || "try again"))); }
+  busy = false; if (dirty) flush();
+}
+function errText(e){
+  const c = e?.code || "";
+  if (/not_granted|permission|denied|not_writer/.test(c)) return "Pinning a song needs Contributor access to this page. Ask the exhibitor to share it with you.";
+  if (c === "quota_exceeded") return "The wall is full. Ask the exhibitor to clear some notes.";
+  if (c === "unavailable") return "The wall can't be reached right now. Check the connection and try again.";
+  return "That didn't pin. Try again in a moment.";
+}
+
+/* ---------- song wall ---------- */
+let wallItems = [], freshId = null;
+function renderWall(){
+  $("#wallCount").textContent = wallItems.length ? `${wallItems.length} song${wallItems.length === 1 ? "" : "s"} pinned` : "No songs pinned yet";
+  $("#board").innerHTML = wallItems.length ? wallItems.map(n => `<article class="sticky c${(n.color|0)%5}${n.id === freshId ? " fresh" : ""}" style="--t:${(+n.tilt || 0).toFixed(1)}deg">
+      <p class="s-song">${esc(n.song)}</p>${n.artist ? `<p class="s-artist">${esc(n.artist)}</p>` : ""}${n.note ? `<p class="s-note">“${esc(n.note)}”</p>` : ""}
+      <p class="s-by">— ${esc(n.name || "a listener")}</p>${store.canEdit ? `<button type="button" class="s-del" data-del="${esc(n.id)}" aria-label="Remove this note">×</button>` : ""}</article>`).join("")
+    : `<div class="board-empty">The wall is waiting for its first song.<small>Fill in the card and press “Pin it to the wall”. Your note appears here instantly.</small></div>`;
+}
+function startWallDb(db){
+  const t = setTimeout(() => { $("#wallCount").textContent = "The wall can't be reached yet. Notes will appear when the connection returns."; }, 10000);
+  db.collection("wall").orderBy("createdAt","desc").limit(400).onSnapshot(s => {
+    if (!s.metadata.fromCache) clearTimeout(t);
+    wallItems = s.docs.map(d => ({ id:d.id, ...d.data() })); renderWall();
+  }, e => { clearTimeout(t); $("#wallCount").textContent = "The wall stopped updating. Reload the page to reconnect."; });
+}
+function startWallLocal(){ wallItems = LS.get("mtjas-wall") || []; renderWall(); $("#wallMode").textContent = "saved on this device"; }
+async function submitWall(e){
+  e.preventDefault();
+  const song = $("#w-song").value.trim(), msg = $("#formMsg");
+  if (!song){ msg.textContent = "Add the song title first."; $("#w-song").focus(); return; }
+  const item = { song, artist:$("#w-artist").value.trim(), note:$("#w-note").value.trim(), name:$("#w-name").value.trim(), color:Math.floor(Math.random()*5), tilt:+(Math.random()*6-3).toFixed(1), createdAt:Date.now() };
+  const btn = $("#wallForm button[type=submit]"); btn.disabled = true; msg.textContent = "";
+  try {
+    if (store.db){ const ref = await store.db.collection("wall").add(item); freshId = ref.id; }
+    else { item.id = "l" + Date.now(); freshId = item.id; wallItems.unshift(item); LS.set("mtjas-wall", wallItems); }
+    renderWall(); $("#wallForm").reset(); toast("Pinned. Thank you for adding to the wall.");
+  } catch (err) { msg.textContent = errText(err); }
+  btn.disabled = false;
+}
+async function deleteNote(id){
+  try {
+    if (store.db) await store.db.collection("wall").doc(id).delete();
+    else { wallItems = wallItems.filter(n => n.id !== id); LS.set("mtjas-wall", wallItems); renderWall(); }
+  } catch (e) { toast("Couldn't remove that note."); }
+}
+
+/* ---------- images ---------- */
+let pickKey = null;
+function downscale(file){
+  return new Promise((res, rej) => {
+    const img = new Image(), u = URL.createObjectURL(file);
+    img.onload = () => { const s = Math.min(1, 900 / Math.max(img.width, img.height)); const c = document.createElement("canvas"); c.width = Math.round(img.width*s); c.height = Math.round(img.height*s); c.getContext("2d").drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(u); c.toBlob(b => b ? res(b) : rej(new Error("Couldn't read that image.")), "image/jpeg", .85); };
+    img.onerror = () => rej(new Error("That file isn't an image this browser can read."));
+    img.src = u;
+  });
+}
+async function onFile(){
+  const f = $("#filePick").files[0]; $("#filePick").value = ""; if (!f || !pickKey) return;
+  setSaveState("Uploading photo…");
+  try {
+    const blob = await downscale(f); let url;
+    if (store.assets){ url = (await store.assets.upload(blob)).url; }
+    else url = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+    O[pickKey] = url; applyAll(); queueSave();
+  } catch (e) { setSaveState("Photo not added: " + (e?.message || "try another file")); }
+}
+
+/* ---------- journey strip ---------- */
+let curStage = -1;
+function renderStops(){
+  $("#stops").innerHTML = STAGES.map((s,i) => `<button type="button" data-stop="${i}"><span class="num">${i+1}</span><span class="lab">${esc(s.label)}</span></button>`).join("");
+}
+function goStage(i){ i = Math.max(0, Math.min(STAGES.length - 1, i)); document.getElementById(STAGES[i].id).scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); }
+function watchStages(){
+  const setCur = i => { curStage = i; $$("#stops button").forEach((b,j) => j === i ? b.setAttribute("aria-current","step") : b.removeAttribute("aria-current")); };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setCur(+e.target.dataset.stage); }), { rootMargin:"-45% 0px -50% 0px" });
+  $$("[data-stage]").forEach(s => io.observe(s));
+  const homeIo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setCur(-1); }), { rootMargin:"-45% 0px -50% 0px" });
+  homeIo.observe($("#home"));
+}
+
+/* ---------- edit mode ---------- */
+function setEditing(on){
+  document.body.classList.toggle("editing", on);
+  $("#editToggle").setAttribute("aria-pressed", String(on));
+  $("#editToggle").textContent = on ? "Done editing" : "Edit content";
+  $("#editbar").hidden = !on;
+  $$("[data-k]").forEach(el => on ? el.setAttribute("contenteditable","true") : el.removeAttribute("contenteditable"));
+  renderDiary(); renderWall();
+}
+const editObserver = new MutationObserver(() => { if (document.body.classList.contains("editing")) $$("[data-k]:not([contenteditable])").forEach(el => el.setAttribute("contenteditable","true")); });
+
+/* ---------- events ---------- */
+document.addEventListener("click", e => {
+  const editing = document.body.classList.contains("editing");
+  const t = e.target;
+  const pick = t.closest("[data-pick]"); if (pick){ e.preventDefault(); e.stopPropagation(); pickKey = pick.dataset.pick; $("#filePick").click(); return; }
+  if (editing && t.closest("[data-k]")) return;
+  const go = t.closest("[data-go]");
+  if (go){ const k = go.dataset.go; if (GENRES.includes(k)) openWorld(k); else document.getElementById(k).scrollIntoView({ behavior: reduced ? "auto" : "smooth" }); return; }
+  const wb = t.closest("[data-world]"); if (wb){ openWorld(wb.dataset.world); return; }
+  const pola = t.closest(".pola"); if (pola){ const o = pola.classList.toggle("open"); pola.setAttribute("aria-expanded", String(o)); return; }
+  const obj = t.closest("[data-obj]"); if (obj){ showStudio(obj.dataset.obj); return; }
+  const sat = t.closest("[data-sat]"); if (sat){ showSat(+sat.dataset.sat); return; }
+  const mood = t.closest("[data-mood]"); if (mood){ renderMood(+mood.dataset.mood); return; }
+  const beh = t.closest("[data-beh]"); if (beh){ showBeh(+beh.dataset.beh); return; }
+  const stop = t.closest("[data-stop]"); if (stop){ goStage(+stop.dataset.stop); return; }
+  const del = t.closest("[data-del]"); if (del){ deleteNote(del.dataset.del); return; }
+  const dd = t.closest("[data-diary-del]"); if (dd){ DIARY = [...(DIARY ?? CONTENT.listener.diary)]; DIARY.splice(+dd.dataset.diaryDel, 1); renderDiary(); queueSave(); return; }
+  if (t.closest("#wClose")){ closeWorld(); return; }
+});
+document.addEventListener("keydown", e => {
+  const t = e.target, typing = t.closest?.("input,textarea,[contenteditable]");
+  if ((e.key === "Enter" || e.key === " ") && !typing && t.matches?.("[role=button]")){ e.preventDefault(); t.dispatchEvent(new MouseEvent("click", { bubbles:true })); return; }
+  if (typing){ if (e.key === "Enter" && t.matches("[data-k]") && !e.shiftKey){ e.preventDefault(); t.blur(); } return; }
+  const w = $("#world");
+  if (!w.hidden){
+    if (e.key === "Escape") closeWorld();
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft"){ const i = GENRES.indexOf(worldG); openWorld(GENRES[(i + (e.key === "ArrowRight" ? 1 : 2)) % 3]); }
+    return;
+  }
+  if (e.key === "ArrowRight") goStage(curStage + 1);
+  if (e.key === "ArrowLeft") curStage <= 0 ? window.scrollTo({ top:0, behavior:"smooth" }) : goStage(curStage - 1);
+});
+document.addEventListener("input", e => { const el = e.target.closest("[data-k]"); if (!el) return; O[el.dataset.k] = el.textContent.trim(); queueSave(); });
+document.addEventListener("focusout", e => { const el = e.target.closest?.("[data-k]"); if (!el) return; if (!el.textContent.trim()){ delete O[el.dataset.k]; el.textContent = val(el.dataset.k); queueSave(); } });
+document.addEventListener("paste", e => { const el = e.target.closest?.("[data-k]"); if (!el) return; e.preventDefault(); document.execCommand("insertText", false, (e.clipboardData?.getData("text/plain") || "").replace(/\s+/g," ")); });
+$("#diaryForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const entry = { date:$("#d-date").value.trim() || new Date().toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }), song:$("#d-song").value.trim(), text:$("#d-text").value.trim() };
+  if (!entry.song && !entry.text) return;
+  DIARY = [entry, ...(DIARY ?? CONTENT.listener.diary)]; e.target.reset(); renderDiary(); queueSave();
+});
+$("#wallForm").addEventListener("submit", submitWall);
+$("#filePick").addEventListener("change", onFile);
+$("#editToggle").addEventListener("click", () => setEditing(!document.body.classList.contains("editing")));
+$("#jPrev").addEventListener("click", () => curStage <= 0 ? window.scrollTo({ top:0, behavior:"smooth" }) : goStage(curStage - 1));
+$("#jNext").addEventListener("click", () => goStage(curStage + 1));
+matchMedia("(max-width:700px)").addEventListener("change", () => { buildMap(); renderHubDiagram(); });
+
+/* ---------- runtime: shared database (in the claude.ai viewer) or this browser ---------- */
+async function initRuntime(){
+  if (!store.inViewer){
+    const saved = LS.get("mtjas-content"); if (saved){ O = saved.o || {}; DIARY = saved.diary ?? null; }
+    store.canEdit = new URLSearchParams(location.search).has("edit"); $("#editToggle").hidden = !store.canEdit; applyAll(); startWallLocal(); return;
+  }
+  const [db, user, assets] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("assets")]);
+  store.db = db; store.assets = assets;
+  store.canEdit = !!(db && user && await Promise.resolve(user.canEdit()));
+  if (store.canEdit) $("#editToggle").hidden = false;
+  if (!db){ startWallLocal(); return; }
+  db.doc("site/content").onSnapshot(s => {
+    if (busy || dirty || s.metadata.hasPendingWrites) return;
+    if (s.exists){ const d = s.data(); O = { ...(d.o || {}) }; DIARY = d.diary ?? null; } applyAll();
+  }, () => {});
+  startWallDb(db);
+}
+
+/* ---------- boot ---------- */
+tearEdges(); buildMap(); renderPolas();
+$("#studioSvg").innerHTML = STUDIO_SVG; showStudio(null);
+renderHubDiagram(); renderPortals(); renderUniverse(); renderListener(); renderStops(); watchStages();
+$("#wallCount").textContent = store.inViewer ? "Connecting to the wall…" : "";
+editObserver.observe(document.body, { childList:true, subtree:true });
+initRuntime();
+</script>
+
+</body></html>
