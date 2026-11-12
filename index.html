@@ -247,7 +247,8 @@ section{position:relative}
 .p-hiphop::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(217,166,161,.35) 1.4px,transparent 1.6px);background-size:11px 11px;-webkit-mask:linear-gradient(160deg,#000 0%,transparent 70%);mask:linear-gradient(160deg,#000 0%,transparent 70%)}
 .p-hiphop .pt-name{font-family:var(--f-rap);font-size:clamp(46px,4.6vw,74px);line-height:.88;text-transform:uppercase;letter-spacing:.01em}
 .p-hiphop .pt-name i{font-style:normal;color:var(--sage)}
-.p-hiphop .pt-feel span{background:var(--sage);color:var(--char)}
+.p-hiphop .pt-feel span{background:var(--pink);color:var(--char)}
+.p-hiphop .pt-feel span:nth-child(even){background:var(--sage)}
 .p-hiphop .bars{position:absolute;top:34px;left:22px;right:22px;height:120px;display:flex;align-items:flex-end;gap:5px}
 .p-hiphop .bars i{flex:1;background:var(--pink);animation:beat .667s ease-in-out infinite;transform-origin:bottom}
 @keyframes beat{0%,100%{transform:scaleY(.25)}40%{transform:scaleY(1)}}
@@ -475,6 +476,18 @@ section{position:relative}
   .diary{padding-left:44px}
   .diary::before{left:28px}
   .mark small{display:none}
+  .hero{padding-top:110px}
+  .float-note{font-size:40px}
+  .hero-deco.float-note:nth-of-type(1){left:58%!important;top:34px!important}
+  .hero-deco.float-note:nth-of-type(2){left:72%!important;top:44px!important}
+  .hero-deco.float-note:nth-of-type(3){left:86%!important;top:30px!important}
+  .w-top{flex-wrap:nowrap;gap:8px}
+  .w-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0}
+  .w-tabs::-webkit-scrollbar{display:none}
+  .w-tabs button{white-space:nowrap;font-size:13px;padding:6px 11px}
+  .w-close{flex:none;padding:7px 12px}
+  .wc-t{display:none}
+  .w-wrap{padding-top:18px}
 }
 @media (min-width:641px){.journey .stops .num{display:none}}
 @media (prefers-reduced-motion:reduce){
@@ -1098,7 +1111,7 @@ function openWorld(g){
   w.setAttribute("aria-label", `${G.name} world`);
   w.innerHTML = `<div class="w-bg" aria-hidden="true">${bg}</div>
     <div class="w-top"><div class="w-tabs">${GENRES.map(x=>`<button type="button" data-world="${x}" aria-current="${x===g}"><span>${esc(CONTENT.genres[x].short)}</span></button>`).join("")}</div>
-      <button type="button" class="w-close" id="wClose">Back to the universe ✕</button></div>
+      <button type="button" class="w-close" id="wClose" aria-label="Back to the universe"><span class="wc-t">Back to the universe </span>✕</button></div>
     <div class="w-wrap">
       <header class="w-head"><p class="w-eyebrow">Genre world ${gi+1} of 3</p><h2 class="w-title">${title}</h2>
         <ul class="w-feel">${G.feelings.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></header>
